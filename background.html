@@ -74,7 +74,7 @@
       }
 
       function ensureOverlay(tab, info) {
-        console.log('Ensuring overlay for '+tab.id+' ('+info.fullname+')');
+        console.log('Ensuring overlay for '+tab.id, info);
         if (!tabInfo[tab.id]) {
           addOverlayContent(tab, function() { 
             tabInfo[tab.id] = true;
