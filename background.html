@@ -21,16 +21,16 @@
           } else {
             console.log('Performing AJAX info call for '+url);
             $.ajax({
-              url:'http://www.reddit.com/api/info.json',
-              data:{limit:1, url:url},
-              success:function(resp) {
+              url: 'http://www.reddit.com/api/info.json',
+              data: {limit:1, url:url},
+              success: function(resp) {
                 if (resp.data) {
                   var info = resp.data.children[0].data;
                   redditInfo.setURL(url, info);
                   callback(info);
                 }
               },
-              error:function() {
+              error: function() {
                 callback(null);
               }
             });

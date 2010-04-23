@@ -10,6 +10,7 @@ shineOverlay = {
       .append($('<iframe src="" height="69" width="51" scrolling="no" frameborder="0"></iframe>'))
       .append($('<p class="_shine-body"></p>'))
       .appendTo('body')
+      .css('right', -500)
       .hide();
       
     $('#_shine-overlay ._shine-close').click(function() {
@@ -34,7 +35,7 @@ shineOverlay = {
   },
 
   show: function() {
-    $("#_shine-overlay").css('right', -500).show().animate({'right': 0});
+    $("#_shine-overlay").show().animate({'right': 0});
   },
 
   hide: function() {
