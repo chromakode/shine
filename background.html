@@ -85,12 +85,14 @@
         }
       }
 
-      function onTabLoad(tab) { 
-        chrome.pageAction.show(tab.id);
-        var info = redditInfo.getURL(tab.url);
-        if (info) {
-          console.log('Recognized page '+tab.url+' ('+info.fullname+')');
-          ensureOverlay(tab, info);
+      function onTabLoad(tab) {
+        if (/^http:\/\/.*/.test(tab.url)) {
+          chrome.pageAction.show(tab.id);
+          var info = redditInfo.getURL(tab.url);
+          if (info) {
+            console.log('Recognized page '+tab.url+' ('+info.fullname+')');
+            ensureOverlay(tab, info);
+          }
         }
       }
 
