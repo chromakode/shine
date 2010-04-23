@@ -1,0 +1,24 @@
+{
+  "name": "Shine",
+  "version": "0.0.1",
+  "description": "Provides a contextual overlay above reddit ",
+  "permissions": [
+    "tabs",
+    "http://*/*"
+  ],
+  /*"icons": {
+    "48" : "redchrome-48.png",
+    "128" : "redchrome-128.png"
+  },*/
+  "page_action": {
+    "default_icon": "images/reddit.png",
+    "default_title": "Show reddit information"
+  },
+  "background_page" : "background.html",
+  "content_scripts": [
+    {
+      "matches": ["http://*.reddit.com/*"],
+      "js": ["jquery-1.4.2.min.js", "redditContent.js"]
+    }
+  ]
+}

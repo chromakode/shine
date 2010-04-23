@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  </head>
+  <body>
+    <script>
+      /**
+       * Performs an XMLHttpRequest to Twitter's API to get trending topics.
+       * @param callback Function If the response from fetching url has a
+       *     HTTP status of 200, this function is called with a JSON decoded
+       *     response.  Otherwise, this function is called with null.
+       */
+      function fetchTwitterFeed(callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(data) {
+          if (xhr.readyState == 4) {
+            if (xhr.status == 200) {
+              var data = JSON.parse(xhr.responseText);
+              callback(data);
+            } else {
+              callback(null);
+            }
+          }
+        }
+        // Note that any URL fetched here must be matched by a permission in
+        // the manifest.json file!
+        var url = 'http://search.twitter.com/trends/current.json?exclude=hashtags';
+        xhr.open('GET', url, true);
+        xhr.send();
+      };
+
+      redditInfo = {};
+
+      function addContent(tabId, pieces) {
+        var piece = pieces.shift();
+        if (piece) {
+          console.log('Injecting', piece);
+          if (piece.type == 'js') {
+            var inject = chrome.tabs.executeScript;
+          } else if (piece.type == 'css') {
+            var inject = chrome.tabs.insertCSS;
+          }
+          delete piece.type;
+          
+          inject(tabId, piece, function() {
+            addContent(tabId, pieces);
+          });
+        }
+      }
+
+      function onTabLoad(tab) { 
+        if (redditInfo.hasOwnProperty(tab.url)) {
+          var info = redditInfo[tab.url];
+          console.log('Recognized page '+tab.url+' ('+info.fullname+')');
+          addContent(tab.id, [{type:'js',  file:'jquery-1.4.2.min.js'},
+                              {type:'css', file:'pageOverlay.css'},
+                              {type:'js',  file:'pageOverlay.js'}]);
+        }
+      }
+
+      function onRequest(request, sender, callback) {
+        if (request.action == 'thingClick') {
+          console.log('Thing clicked', request);
+          redditInfo[request.url] = request.info;
+        } else if (request.action == 'queryURL') {
+          callback(redditInfo[request.url]);
+        }
+      }
+
+      chrome.extension.onRequest.addListener(onRequest);
+      chrome.tabs.onCreated.addListener(function(tab) {
+        onTabLoad(tab);
+      });
+      chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+        if (changeInfo.status == 'loading') {
+          onTabLoad(tab);
+        }
+      });
+    </script>
+  </body>
+</html>
