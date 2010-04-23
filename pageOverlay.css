@@ -3,4 +3,4 @@
 #_shine-overlay ._shine-close:hover { border-color:rgba(255,255,255,.4); }
 #_shine-overlay iframe, #_shine-overlay p { float:left; }
 #_shine-overlay iframe { padding:5px; }
-#_shine-overlay p { font-size:12pt; width:400px; margin:0; padding:5px; }
+#_shine-overlay p { font-size:12pt; font-variant:normal; font-style:normal; width:400px; margin:0; padding:5px; }

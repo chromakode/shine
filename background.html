@@ -1,12 +1,47 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
   </head>
   <body>
     <script>
-      redditInfo = {};
+      redditInfo = {
+        getURL: function(url) {
+          return this._urls[url];
+        },
+        
+        setURL: function(url, info) {
+          this._urls[url] = info;
+        },
 
-      function addContent(tabId, pieces) {
+        lookupURL: function(url, callback) {
+          var info = this.getURL(url);
+          if (info) {
+            callback(info);
+          } else {
+            console.log('Performing AJAX info call for '+url);
+            $.ajax({
+              url:'http://www.reddit.com/api/info.json',
+              data:{limit:1, url:url},
+              success:function(resp) {
+                if (resp.data) {
+                  var info = resp.data.children[0].data;
+                  redditInfo.setURL(url, info);
+                  callback(info);
+                }
+              },
+              error:function() {
+                callback(null);
+              }
+            });
+          }
+        },
+        
+        _urls: {}
+      };
+      tabInfo = {};
+
+      function addContent(tabId, pieces, callback) {
         var piece = pieces.shift();
         if (piece) {
           console.log('Injecting', piece);
@@ -18,39 +53,69 @@
           delete piece.type;
           
           inject(tabId, piece, function() {
-            addContent(tabId, pieces);
+            addContent(tabId, pieces, callback);
           });
+        } else {
+          if (callback) {
+            callback();
+          }
+        }
+      }
+
+      function addOverlayContent(tab, callback) {
+        addContent(tab.id, [{type:'js',  file:'jquery-1.4.2.min.js'},
+                            {type:'css', file:'pageOverlay.css'},
+                            {type:'js',  file:'pageOverlay.js'}], callback);
+      }
+
+      function showOverlay(tab, info) {
+        console.log("Sending show overlay command for", info);
+        chrome.tabs.sendRequest(tab.id, {action:'showOverlay', info:info});
+      }
+
+      function ensureOverlay(tab, info) {
+        console.log('Ensuring overlay for '+tab.id+' ('+info.fullname+')');
+        if (!tabInfo.hasOwnProperty(tab.id)) {
+          addOverlayContent(tab, function() { 
+            tabInfo[tab.id] = true;
+            showOverlay(tab, info);
+          });
+        } else {
+          showOverlay(tab, info);
         }
       }
 
       function onTabLoad(tab) { 
-        if (redditInfo.hasOwnProperty(tab.url)) {
-          var info = redditInfo[tab.url];
+        chrome.pageAction.show(tab.id);
+        var info = redditInfo.getURL(tab.url);
+        if (info) {
           console.log('Recognized page '+tab.url+' ('+info.fullname+')');
-          addContent(tab.id, [{type:'js',  file:'jquery-1.4.2.min.js'},
-                              {type:'css', file:'pageOverlay.css'},
-                              {type:'js',  file:'pageOverlay.js'}]);
+          ensureOverlay(tab, info);
         }
+      }
+
+      function onActionClicked(tab) {
+        redditInfo.lookupURL(tab.url, function(info) {
+          ensureOverlay(tab, info);
+        })
       }
 
       function onRequest(request, sender, callback) {
         if (request.action == 'thingClick') {
           console.log('Thing clicked', request);
-          redditInfo[request.url] = request.info;
+          redditInfo.setURL(request.url, request.info);
         } else if (request.action == 'queryURL') {
-          callback(redditInfo[request.url]);
+          callback(redditInfo.getURL(request.url));
         }
       }
 
       chrome.extension.onRequest.addListener(onRequest);
-      chrome.tabs.onCreated.addListener(function(tab) {
-        onTabLoad(tab);
-      });
       chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         if (changeInfo.status == 'loading') {
           onTabLoad(tab);
         }
       });
+      chrome.pageAction.onClicked.addListener(onActionClicked);
     </script>
   </body>
 </html>
