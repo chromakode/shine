@@ -7,11 +7,12 @@
     <script>
       redditInfo = {
         getURL: function(url) {
-          return this._urls[url];
+          return this.url[url];
         },
         
         setURL: function(url, info) {
-          this._urls[url] = info;
+          this.url[url] = info;
+          this.fullname[info.fullname] = info;
         },
 
         lookupURL: function(url, callback) {
@@ -37,7 +38,8 @@
           }
         },
         
-        _urls: {}
+        url: {}, 
+        fullname: {}
       };
       tabInfo = {};
 
@@ -88,7 +90,7 @@
       function onTabLoad(tab) {
         if (/^http:\/\/.*/.test(tab.url)) {
           chrome.pageAction.show(tab.id);
-          var info = redditInfo.getURL(tab.url);
+          var info = redditInfo.url[tab.url];
           if (info) {
             console.log('Recognized page '+tab.url+' ('+info.fullname+')');
             ensureOverlay(tab, info);
@@ -106,8 +108,12 @@
         if (request.action == 'thingClick') {
           console.log('Thing clicked', request);
           redditInfo.setURL(request.url, request.info);
-        } else if (request.action == 'queryURL') {
-          callback(redditInfo.getURL(request.url));
+        } else if (request.action == 'query') {
+          if (request.hasOwnProperty('url')) {
+            callback(redditInfo.url[request.url]);
+          } else if (request.hasOwnProperty('fullname')) {
+            callback(redditInfo.fullname[request.fullname]);
+          }
         }
       }
 

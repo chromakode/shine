@@ -1,21 +1,14 @@
 shineOverlay = {
   exists: function() {
-    return $("#_shine-overlay").length != 0;
+    return $('#_shine-overlay').length != 0;
   },
 
   init: function() {
 
     var result = $('<div id="_shine-overlay"></div>')
-      .append($('<img class="_shine-close" src="'+chrome.extension.getURL('images/close.png')+'" alt="close"/>'))
-      .append($('<iframe src="" height="69" width="51" scrolling="no" frameborder="0"></iframe>'))
-      .append($('<p class="_shine-body"></p>'))
+      .append($('<iframe id="_shine-frame" src="" scrolling="no" frameborder="0"></iframe>'))
       .appendTo('body')
-      .css('right', -500)
       .hide();
-      
-    $('#_shine-overlay ._shine-close').click(function() {
-      shineOverlay.hide();
-    });
 
     return result;
   },
@@ -24,22 +17,27 @@ shineOverlay = {
     if (info) {
       if (!this.info || this.info.fullname != info.fullname) {
         this.info = info;
-        $("#_shine-overlay iframe").show().attr('src', 'http://www.reddit.com/static/button/button2.html?width=51&url='+encodeURIComponent(window.location.href)+'&title='+encodeURIComponent(this.info.title));
-        $("#_shine-overlay ._shine-body").text(info.title);
+        $('#_shine-overlay iframe').show().attr('src', chrome.extension.getURL('bar.html#'+encodeURIComponent(JSON.stringify(info))));
       }
     } else {
       this.info = null;
-      $("#_shine-overlay iframe").hide();
-      $("#_shine-overlay ._shine-body").text("No reddit submission found.");
+      $('#_shine-overlay iframe').hide();
     }
   },
 
+  visible: false,
   show: function() {
-    $("#_shine-overlay").show().animate({'right': 0});
+    if (!this.visible) {
+      this.visible = true;
+      $('#_shine-overlay').css('right', (-$('#_shine-overlay').innerWidth())+'px').show().animate({'right': 0});
+    }
   },
 
   hide: function() {
-    $('#_shine-overlay').animate({'right': -500}, function() { $(this).hide() });
+    if (this.visible) {
+      this.visible = false;
+      $('#_shine-overlay').animate({'right': (-$('#_shine-overlay').innerWidth())+'px'}, function() { $(this).hide() });
+    }
   }
 }
 
@@ -50,5 +48,21 @@ function onRequest(request, sender, callback) {
   }
 }
 chrome.extension.onRequest.addListener(onRequest);
+
+
+function receiveMessage(event) {
+  if (event.origin == chrome.extension.getURL('').slice(0, -1)) {
+    var request = JSON.parse(event.data);
+    console.log('Message received from bar iframe: ', request);
+    if (request.action == 'size') {
+      $('#_shine-overlay').width(request.width+'px');
+      $('#_shine-overlay').height(request.height+'px');
+    } else if (request.action == 'close') {
+      shineOverlay.hide();
+    }
+  }
+}
+window.addEventListener('message', receiveMessage, false);
+
 shineOverlay.init();
-console.log("Shine page overlay loaded.");
+console.log('Shine page overlay loaded.');

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="bar.css" type="text/css" />
+    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <script type="text/javascript">
+      var info = JSON.parse(decodeURIComponent(location.hash.substr(1)));
+      $(document).ready(function() {
+        if (info.likes == true) {
+          $('#bar').addClass('liked');
+        } else if (info.likes == false) {
+          $('#bar').addClass('disliked');
+        }
+        $('#score').text(info.score);
+        $('#title').text(info.title)
+        console.log(info);
+        $('#comments').text(info.num_comments);
+        $('#comments').click(function() {
+          window.top.location = 'http://reddit.com'+info.permalink;
+        })
+
+        $('#close').click(function() {
+          window.top.postMessage(JSON.stringify({action:'close'}), '*');
+        });
+
+        window.setTimeout(function() {
+          window.top.postMessage(JSON.stringify({action:'size', width:$('#bar').innerWidth(), height:$('#bar').innerHeight()}), '*');
+        }, 0)
+      });
+    </script>
+  </head>
+  <body>
+    <div id="bar">
+      <span id="score">?</span> <span id="title"></span>
+      <div id="buttons">
+        <button id="like">Like</button>
+        <button id="dislike">Dislike</button>
+        <button id="comments">?</button>
+        <button id="close" ><img src="/images/close.png" alt="close"/></button>
+      </div>
+    </div>
+  </body>
+</html>

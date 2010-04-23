@@ -1,0 +1,17 @@
+body { margin:0; font-family:sans-serif; }
+button { margin:5px 2px; border-radius:2px; vertical-align:middle; }
+button#like { background:buttonface url(/images/upgray.png) no-repeat 5px center; padding-left:22px; }
+.liked button#like { background-image:url(/images/upmod.png)}
+button#dislike { background:buttonface url(/images/downgray.png) no-repeat 5px center; padding-left:22px; }
+.disliked button#dislike { background-image:url(/images/downmod.png)}
+button#comments { background:buttonface url(/images/comments.png) no-repeat 5px center; padding-left:22px; }
+#bar { display:table; color:white; }
+#bar > * { display:table-cell; vertical-align:middle; }
+#buttons { white-space:nowrap; padding-left:10px; }
+#score { padding:0 15px; font-weight:bold; color:#969696; }
+.liked #score { color:#FF8B60; }
+.disliked #score { color:#9494FF; }
+#title { padding:5px 0; }
+#close { background:none; padding:0; border:1px solid transparent; border-radius:2px; }
+#close img { vertical-align:middle; padding:3px; }
+#close:hover { border-color:rgba(255,255,255,.4); }
