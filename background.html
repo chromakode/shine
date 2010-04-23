@@ -75,7 +75,7 @@
 
       function ensureOverlay(tab, info) {
         console.log('Ensuring overlay for '+tab.id+' ('+info.fullname+')');
-        if (!tabInfo.hasOwnProperty(tab.id)) {
+        if (!tabInfo[tab.id]) {
           addOverlayContent(tab, function() { 
             tabInfo[tab.id] = true;
             showOverlay(tab, info);
@@ -112,6 +112,7 @@
       chrome.extension.onRequest.addListener(onRequest);
       chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
         if (changeInfo.status == 'loading') {
+          tabInfo[tabId] = false;
           onTabLoad(tab);
         }
       });
