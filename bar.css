@@ -1,10 +1,14 @@
 body { margin:0; font-family:sans-serif; }
+
 button { margin:5px 2px; border-radius:2px; vertical-align:middle; }
 button#like { background:buttonface url(/images/upgray.png) no-repeat 5px center; padding-left:22px; }
 .liked button#like { background-image:url(/images/upmod.png)}
 button#dislike { background:buttonface url(/images/downgray.png) no-repeat 5px center; padding-left:22px; }
 .disliked button#dislike { background-image:url(/images/downmod.png)}
 button#comments { background:buttonface url(/images/comments.png) no-repeat 5px center; padding-left:22px; }
+.liked button#like, .disliked button#dislike { border:2px inset buttonface; }
+.liked button#like:active, .disliked button#dislike:active { border:2px outset buttonface; }
+
 #bar { display:table; color:white; }
 #bar > * { display:table-cell; vertical-align:middle; }
 #buttons { white-space:nowrap; padding-left:10px; }
