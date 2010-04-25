@@ -38,7 +38,7 @@
         $('#comments').text(info.num_comments);
 
         window.setTimeout(function() {
-          msgJSON({action:'size', width:$('#bar').innerWidth(), height:$('#bar').innerHeight()});
+          msgJSON({action:'size', width:$('#bar').outerWidth(), height:$('#bar').outerHeight()});
         }, 0)
       }
 
@@ -75,13 +75,14 @@
   </head>
   <body>
     <div id="bar">
-      <span id="score">?</span> <span id="title"></span>
-      <div id="buttons">
-        <button id="like">Like</button>
-        <button id="dislike">Dislike</button>
-        <button id="comments">?</button>
-        <button id="close" ><img src="/images/close.png" alt="close"/></button>
-      </div>
+        <a id="logo" href="http://www.reddit.com" target="_top"></a>
+        <span id="score">?</span> <span id="title"></span>
+        <div id="buttons">
+          <button id="like">Like</button>
+          <button id="dislike">Dislike</button>
+          <button id="comments">?</button>
+          <button id="close" ><img src="/images/close.png" alt="close"/></button>
+        </div>
     </div>
   </body>
 </html>
