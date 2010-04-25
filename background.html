@@ -159,7 +159,14 @@
       }
 
       function onActionClicked(tab) {
+        var frame = 0;
+        var workingAnimation = window.setInterval(function() {
+          chrome.pageAction.setIcon({tabId:tab.id, path:'/images/working'+frame+'.png'});
+          frame = (frame + 1) % 6;
+        }, 200);
         redditInfo.lookupURL(tab.url, function(info) {
+          window.clearInterval(workingAnimation);
+          chrome.pageAction.setIcon({tabId:tab.id, path:'/images/reddit.png'});
           ensureOverlay(tab, info);
         })
       }
