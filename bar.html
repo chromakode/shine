@@ -53,8 +53,13 @@
           handleData();
         });
       
-        $('#comments').click(function() {
-          window.top.location = 'http://reddit.com'+info.permalink;
+        $('#comments').click(function(e) {
+          var dest = 'http://reddit.com'+info.permalink;
+          if (e.button == 1) {
+            window.open(dest);
+          } else {
+            window.top.location = dest;
+          }
         })
         
         $('#like').click(function() {
