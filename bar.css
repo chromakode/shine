@@ -9,7 +9,7 @@ button#comments { background:buttonface url(/images/comments.png) no-repeat 5px 
 .liked button#like, .disliked button#dislike { border:2px inset buttonface; }
 .liked button#like:active, .disliked button#dislike:active { border:2px outset buttonface; }
 
-#bar { display:table; background:rgba(0,0,0,.93); color:white; text-align:left; font-family:sans-serif; border-top-left-radius:5px; border-bottom-left-radius:5px; border:1px solid black; }
+#bar { display:table; color:white; text-align:left; font-family:sans-serif; border-top-left-radius:5px; border-bottom-left-radius:5px; }
 #bar > * { display:table-cell; vertical-align:middle; }
 #logo { width:19px; height:19px; padding:0 7px; text-align:center; background:rgba(255,255,255,.075) url(/images/reddit.png) no-repeat center center; }
 #buttons { white-space:nowrap; padding-left:10px; }

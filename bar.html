@@ -39,7 +39,7 @@
 
         window.setTimeout(function() {
           msgJSON({action:'size', width:$('#bar').outerWidth(), height:$('#bar').outerHeight()});
-        }, 0)
+        }, 0);
       }
 
       function handleData() {
@@ -48,7 +48,7 @@
       }
 
       $(document).ready(function() {
-        $(window).resize(function () {
+        $(window).resize(function() {
           console.log('Resize alert detected; updating shine display.');
           handleData();
         });

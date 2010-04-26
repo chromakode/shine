@@ -4,22 +4,20 @@ shineOverlay = {
   },
 
   init: function() {
-
     var result = $('<div id="_shine-overlay"></div>')
       .append($('<iframe id="_shine-frame" src="bar.html" scrolling="no" frameborder="0"></iframe>'))
       .appendTo('body')
-      .hide();
+      .css('visible', false);
 
     return result;
   },
 
   display: function(info) {
     if (info) {
-      if (!this.info || this.info.fullname == info.fullname) {
+      if (!this.info || this.info.name == info.name) {
         this.info = info;
         // Another chrome bug prevents us from properly using postMessage on our child iframe, so we resort to another hack:
         // We'll change the height of the iframe ever so slightly (not displayed), and pick up the resize event inside the frame.
-        console.log(chrome.extension.getURL('bar.html#'+encodeURIComponent(JSON.stringify(info))));
         $('#_shine-overlay iframe').show().attr('src', chrome.extension.getURL('bar.html#'+encodeURIComponent(JSON.stringify(info))));
         window.setTimeout(function() {
           $('#_shine-overlay iframe').height($('#_shine-overlay iframe').height()+1);
@@ -31,18 +29,30 @@ shineOverlay = {
     }
   },
 
+  resize: function(width, height) {
+    $('#_shine-overlay').width(width);
+    $('#_shine-overlay').height(height);
+  },
+
   visible: false,
   show: function() {
     if (!this.visible) {
       this.visible = true;
-      $('#_shine-overlay').css('right', (-$('#_shine-overlay').innerWidth())+'px').show().animate({'right': 0});
+      $('#_shine-overlay')
+        .css({
+          'right':(-$('#_shine-overlay').innerWidth())+'px',
+          'visible':true})
+        .animate({'right': 0});
     }
   },
 
   hide: function() {
     if (this.visible) {
       this.visible = false;
-      $('#_shine-overlay').animate({'right': (-$('#_shine-overlay').innerWidth())+'px'}, function() { $(this).hide() });
+      $('#_shine-overlay')
+        .animate({right:(-$('#_shine-overlay').innerWidth())+'px'}, function() {
+          $('#_shine-overlay').css('visible', false);
+        });
     }
   }
 }
@@ -51,7 +61,6 @@ function onRequest(request, sender, callback) {
   if (request.action == 'showInfo') {
     console.log('Shine showInfo update received:', request.info);
     shineOverlay.display(request.info);
-    shineOverlay.show();
   }
 }
 chrome.extension.onRequest.addListener(onRequest);
@@ -63,10 +72,10 @@ function receiveMessage(event) {
     var request = JSON.parse(event.data);
     console.log('Message received from bar iframe: ', request);
     if (request.action == 'size') {
-      $('#_shine-overlay').width(request.width+'px');
-      $('#_shine-overlay').height(request.height+'px');
+      shineOverlay.resize(request.width, request.height);
+      shineOverlay.show();
     } else if (request.action == 'close') {
-      shineOverlay.hide();
+      shineOverlay.hide(true);
     } else if (request.action == 'vote') {
       request.fullname = shineOverlay.info.name;
 	    chrome.extension.sendRequest(request);
