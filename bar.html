@@ -35,7 +35,7 @@
         }
         $('#score').text(info.score);
         $('#title').text(info.title)
-        $('#comments').text(info.num_comments);
+        $('#comments span').text(info.num_comments);
 
         window.setTimeout(function() {
           msgJSON({action:'size', width:$('#bar').outerWidth(), height:$('#bar').outerHeight()});
@@ -83,9 +83,9 @@
         <a id="logo" href="http://www.reddit.com" target="_top"></a>
         <span id="score">?</span> <span id="title"></span>
         <div id="buttons">
-          <button id="like">Like</button>
-          <button id="dislike">Dislike</button>
-          <button id="comments">?</button>
+          <button id="like"><span>Like</span></button>
+          <button id="dislike"><span>Dislike</span></button>
+          <button id="comments"><span>?</span></button>
           <button id="close" ><img src="/images/close.png" alt="close"/></button>
         </div>
     </div>

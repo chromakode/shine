@@ -7,7 +7,7 @@ shineOverlay = {
     var result = $('<div id="_shine-overlay"></div>')
       .append($('<iframe id="_shine-frame" src="bar.html" scrolling="no" frameborder="0"></iframe>'))
       .appendTo('body')
-      .css('visible', false);
+      .css('visibility', 'visible');
 
     return result;
   },
@@ -40,8 +40,8 @@ shineOverlay = {
       this.visible = true;
       $('#_shine-overlay')
         .css({
-          'right':(-$('#_shine-overlay').innerWidth())+'px',
-          'visible':true})
+          'right': (-$('#_shine-overlay').innerWidth())+'px',
+          'visibility': 'visible'})
         .animate({'right': 0});
     }
   },
@@ -51,7 +51,7 @@ shineOverlay = {
       this.visible = false;
       $('#_shine-overlay')
         .animate({right:(-$('#_shine-overlay').innerWidth())+'px'}, function() {
-          $('#_shine-overlay').css('visible', false);
+          $('#_shine-overlay').css('visibility', 'hidden');
         });
     }
   }
