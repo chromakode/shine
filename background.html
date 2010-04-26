@@ -33,11 +33,11 @@
                 redditInfo.modhash = resp.data.modhash;
                 redditInfo.setURL(info.url, info);
                 tabStatus.updateOverlay(info);
-                callback(info);
+                if (callback) { callback(info); }
               }
             },
             error: function() {
-              callback(null);
+              if (callback) { callback(null); }
             }
           });
         },
@@ -123,9 +123,7 @@
             addContent(tab, pieces, callback);
           });
         } else {
-          if (callback) {
-            callback();
-          }
+          if (callback) { callback(); }
         }
       }
 
@@ -175,6 +173,7 @@
         if (request.action == 'thingClick') {
           console.log('Thing clicked', request);
           redditInfo.setURL(request.url, request.info);
+          redditInfo.lookupName(request.info.name);
         } else if (request.action == 'query') {
           if (request.hasOwnProperty('url')) {
             callback(redditInfo.url[request.url]);
