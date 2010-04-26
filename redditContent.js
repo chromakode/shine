@@ -18,9 +18,9 @@ function scrapeThingInfo(thing) {
     info.likes = null;
   }
 
-  info.score = parseInt(thing.find(".score").text());
+  info.score = parseInt(thing.find(".score:visible").text());
 
-  info.num_comments = parseInt(thing.find('.comments').text());
+  info.num_comments = parseInt(thing.find('.comments').text()) || 0;
 
   info.permalink = thing.find('.comments').attr('href').match(/.*reddit.com(\/.+)/)[1];
 
