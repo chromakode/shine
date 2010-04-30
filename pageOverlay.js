@@ -76,7 +76,7 @@ function receiveMessage(event) {
       shineOverlay.show();
     } else if (request.action == 'close') {
       shineOverlay.hide(true);
-    } else if (request.action == 'vote') {
+    } else if ($.inArray(request.action,  ['vote', 'save', 'unsave']) != -1) {
       request.fullname = shineOverlay.info.name;
 	    chrome.extension.sendRequest(request);
     }

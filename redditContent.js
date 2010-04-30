@@ -18,6 +18,8 @@ function scrapeThingInfo(thing) {
     info.likes = null;
   }
 
+  info.saved = thing.hasClass('saved');
+
   info.score = parseInt(thing.find(".score:visible").text());
 
   info.num_comments = parseInt(thing.find('.comments').text()) || 0;

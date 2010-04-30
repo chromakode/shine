@@ -22,16 +22,31 @@
         info.score += likeDelta(likes) - likeDelta(info.likes);
         info.likes = likes;
         update();
-        msgJSON({action:'vote', fullname:info.fullname, likes:info.likes});
+        msgJSON({action:'vote', likes:info.likes});
+      }
+
+      function toggleSaved() {
+        info.saved = !info.saved;
+        update();
+        if (info.saved) {
+          msgJSON({action:'save'});
+        } else {
+          msgJSON({action:'unsave'});
+        }
       }
     
       function update() {      
         if (info.likes == true) {
-          $('#bar').attr('class', 'liked');
+          $('#bar').addClass('liked');
         } else if (info.likes == false) {
-          $('#bar').attr('class', 'disliked');
+          $('#bar').addClass('disliked');
         } else {
-          $('#bar').attr('class', '');
+          $('#bar').removeClass('liked disliked');
+        }
+        if (info.saved == true) {
+          $('#bar').addClass('saved');
+        } else {
+          $('#bar').removeClass('saved');
         }
         $('#score').text(info.score);
         $('#title').text(info.title)
@@ -70,6 +85,10 @@
           vote(info.likes == false ? null : false);
         });
 
+        $('#save').click(function() {
+          toggleSaved();
+        });
+
         $('#close').click(function() {
           msgJSON({action:'close'});
         });
@@ -86,7 +105,8 @@
           <button id="like"><span>Like</span></button>
           <button id="dislike"><span>Dislike</span></button>
           <button id="comments"><span>?</span></button>
-          <button id="close" ><img src="/images/close.png" alt="close"/></button>
+          <button id="save"><span></span></button>
+          <button id="close" ><img src="/images/close.svg" alt="close"/></button>
         </div>
     </div>
   </body>

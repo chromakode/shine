@@ -42,15 +42,26 @@
           });
         },
 
-        vote: function(fullname, likes, callback) {
+        _thingAction: function(action, data, callback) {
           if (!this.modhash) {
-            this.lookupName(fullname, function() {
+            this.lookupName(data.id, function() {
               // Retry after we've stashed a modhash.
-              redditInfo.vote(fullname, likes, callback);
+              redditInfo._thingAction(action, data, callback);
             });
             return
           }
-        
+
+          data.uh = this.modhash;
+          $.ajax({
+            type: 'POST',
+            url: 'http://www.reddit.com/api/'+action,
+            data: data,
+            success: function(resp) { callback(true); },
+            error: function() { callback(false); }
+          });
+        },
+
+        vote: function(fullname, likes, callback) {
           var dir;
           if (likes == true) {
             dir = 1;
@@ -60,13 +71,15 @@
             dir = 0;
           }
           
-          $.ajax({
-            type: 'POST',
-            url: 'http://www.reddit.com/api/vote',
-            data: {id:fullname, dir:dir, uh:this.modhash},
-            success: function(resp) { callback(true); },
-            error: function() { callback(false); }
-          });
+          this._thingAction('vote', {id:fullname, dir:dir}, callback);
+        },
+
+        save: function(fullname, callback) {
+          this._thingAction('save', {id:fullname}, callback);
+        },
+
+        unsave: function(fullname, callback) {
+          this._thingAction('unsave', {id:fullname}, callback);
         },
 
         modhash: null,
@@ -183,6 +196,9 @@
         } else if (request.action == 'vote') {
           console.log('Voting', request);
           redditInfo.vote(request.fullname, request.likes, callback);
+        } else if ($.inArray(request.action, ['save', 'unsave']) !=-1) {
+          console.log('Modifying', request);
+          redditInfo[request.action](request.fullname, callback);
         }
       }
 
