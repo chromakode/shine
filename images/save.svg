@@ -713,6 +713,26 @@
        x2="7.9372396"
        y2="1049.78"
        gradientUnits="userSpaceOnUse" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8221"
+       id="radialGradient2940"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.3525706,4.4574364e-8,0,0.65382819,-6.9391488,1043.0229)"
+       cx="10.992121"
+       cy="0.11211871"
+       fx="10.992121"
+       fy="0.11211871"
+       r="8" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient8227"
+       id="linearGradient2943"
+       gradientUnits="userSpaceOnUse"
+       x1="7.9372396"
+       y1="1040.0298"
+       x2="7.9372396"
+       y2="1049.78" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -721,9 +741,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="16"
-     inkscape:cx="-4.6885263"
-     inkscape:cy="7.3977937"
+     inkscape:zoom="28"
+     inkscape:cx="8"
+     inkscape:cy="8"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -749,7 +769,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -759,14 +779,12 @@
      id="layer1"
      transform="translate(0,-1036.3622)">
     <path
-       style="font-size:40px;font-style:normal;font-weight:normal;color:#000000;fill:url(#radialGradient8213);fill-opacity:1;fill-rule:evenodd;stroke:#a33939;stroke-width:0.99999994000000003;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-       d="m 4.53125,1037.8614 c -0.6208338,0 -1.2257737,0.1403 -1.8125,0.4266 -0.010412,-4e-4 -0.020838,-4e-4 -0.03125,0 -1.350642,0.7665 -2.09375196,1.9102 -2.09375,3.2486 -1.91e-6,1.3562 0.5802255,2.6743 1.6875,3.9049 1.4250839,1.6205 2.90639,3.2532 4.34375,4.8237 0.7503345,0.797 1.9371655,0.797 2.6875,0 l 4.03125,-4.3643 c 1.356015,-1.3538 2.062483,-2.8262 2.0625,-4.3643 -1.8e-5,-0.4704 -0.09247,-0.9896 -0.3125,-1.5095 -0.0097,-0.011 -0.02019,-0.022 -0.03125,-0.033 -0.846455,-1.3704 -2.089226,-2.1329 -3.5625,-2.1329 -0.966313,0 -1.8484617,0.3713 -2.59375,1.05 -0.010412,-3e-4 -0.020838,-3e-4 -0.03125,0 -0.3623478,0.3838 -0.6468225,0.8564 -0.875,1.3454 -0.024722,-0.051 -0.00441,-0.078 -0.03125,-0.1312 -0.010412,-4e-4 -0.020838,-4e-4 -0.03125,0 -0.7764193,-1.4326 -1.9563537,-2.2642 -3.40625,-2.2642 z"
-       id="path6750"
-       sodipodi:nodetypes="csssccccsssssscscc" />
+       style="font-size:40px;font-style:normal;font-weight:normal;color:#000000;fill:url(#radialGradient2940);fill-opacity:1;fill-rule:evenodd;stroke:#a33939;stroke-width:0.99999994;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+       d="m 4.53125,1037.8614 c -1.987432,-0.042 -3.96372118,1.6214 -3.9375,3.6752 -0.023558,1.7306 1.0014408,3.2388 2.1569923,4.437 1.3282859,1.4874 2.6515997,2.9816 4.0198475,4.4317 0.7524779,0.71 2.0461844,0.5538 2.6565572,-0.2642 1.499925,-1.6291 3.010591,-3.2493 4.504444,-4.8833 1.199439,-1.3964 1.92196,-3.4571 1.162159,-5.2307 -0.769454,-1.3093 -2.216964,-2.2735 -3.773935,-2.1616 -1.3427518,0.07 -2.6241932,0.8936 -3.1853853,2.1182 -0.2072582,0.6214 -0.494757,-0.6411 -0.8528165,-0.8165 -0.6754106,-0.8029 -1.6915491,-1.3235 -2.7503632,-1.3058 z"
+       id="path6750" />
     <path
-       style="font-size:40px;font-style:normal;font-weight:normal;color:#000000;fill:none;stroke:url(#linearGradient8233);stroke-width:1.06197906000000009;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.69603526999999998;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
-       d="m 4.53125,1038.813 c -0.4411763,0 -0.8760528,0.1178 -1.3125,0.3281 -1.0651499,0.6211 -1.5625014,1.4008 -1.5625,2.3955 -1.6e-6,1.103 0.4782089,2.1806 1.46875,3.2814 l 4.34375,4.8565 c 0.2377078,0.2658 0.7901407,0.263 1.03125,0 l 4.03125,-4.3971 c 0.01014,-0.011 0.02056,-0.022 0.03125,-0.033 0.0662,-0.066 0.08763,-0.056 0.03125,0 1.222096,-1.2201 1.749986,-2.4337 1.75,-3.708 -1.3e-5,-0.3343 -0.08272,-0.7102 -0.25,-1.1157 -0.703194,-1.105 -1.540419,-1.6079 -2.59375,-1.6079 -0.656019,0 -1.244641,0.2538 -1.8125,0.7547 -0.263411,0.2791 -0.5184799,0.6538 -0.71875,1.0829 -0.3247037,0.6838 -1.6127963,0.6838 -1.9375,0 -0.04323,-0.091 0.00534,-0.047 0,-0.066 -0.010686,-0.011 -0.021107,-0.022 -0.03125,-0.033 -0.00234,0 0.00234,-0.029 0,-0.033 -0.6574626,-1.2062 -1.4583258,-1.7063 -2.46875,-1.7063 z"
-       id="path8103"
-       sodipodi:nodetypes="ccscsscssscscsssssc" />
+       style="font-size:40px;font-style:normal;font-weight:normal;color:#000000;fill:none;stroke:url(#linearGradient2943);stroke-width:1.06197906;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:0.69603529;stroke-dasharray:none;stroke-dashoffset:0;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+       d="m 4.53125,1038.813 c -1.4404988,0.012 -2.9080736,1.2188 -2.875,2.7236 -0.017803,1.4654 0.8939187,2.7037 1.8597991,3.7186 1.317567,1.4731 2.6351339,2.9462 3.9527009,4.4193 0.3891819,0.3865 0.9853485,0.1623 1.2542221,-0.2432 1.2800219,-1.3955 2.5586109,-2.7923 3.8395279,-4.1869 0.277495,-0.1951 0.785244,-0.8288 1.052202,-1.2587 0.659856,-1.0626 1.032981,-2.5063 0.412728,-3.6668 -0.571719,-0.9437 -1.638608,-1.6342 -2.770369,-1.4942 -1.045646,0.097 -1.8917315,0.8869 -2.288311,1.8257 -0.3753163,0.7047 -1.6444509,0.6935 -1.9517087,-0.06 -0.2838048,-0.6361 -0.8240622,-1.3031 -1.5153917,-1.5927 -0.3055127,-0.1291 -0.6409301,-0.1876 -0.9703996,-0.1847 z"
+       id="path8103" />
   </g>
 </svg>
