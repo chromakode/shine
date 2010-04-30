@@ -37,9 +37,9 @@
     
       function update() {      
         if (info.likes == true) {
-          $('#bar').addClass('liked');
+          $('#bar').removeClass('disliked').addClass('liked');
         } else if (info.likes == false) {
-          $('#bar').addClass('disliked');
+          $('#bar').removeClass('liked').addClass('disliked');
         } else {
           $('#bar').removeClass('liked disliked');
         }
