@@ -1,15 +1,15 @@
 {
   "name": "Shine",
-  "version": "0.0.1",
-  "description": "Provides a contextual overlay above reddit ",
+  "version": "0.0.2",
+  "description": "Shine displays a bar over pages on reddit, helping you submit, vote on, save, and view comments for web pages.",
   "permissions": [
     "tabs",
     "http://*/*"
   ],
-  /*"icons": {
-    "48" : "redchrome-48.png",
-    "128" : "redchrome-128.png"
-  },*/
+  "icons": {
+    "48" : "images/shine-48.png",
+    "128" : "images/shine-128.png"
+  },
   "page_action": {
     "default_icon": "images/reddit.png",
     "default_title": "Show reddit information"
