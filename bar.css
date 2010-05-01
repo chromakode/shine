@@ -17,11 +17,15 @@ button#save span { background-image:url(/images/savegray.svg); }
 #bar { display:table; color:white; text-align:left; font-family:sans-serif; border-top-left-radius:5px; border-bottom-left-radius:5px; }
 #bar > * { display:table-cell; vertical-align:middle; }
 #logo { width:19px; height:19px; padding:0 7px; text-align:center; background:rgba(255,255,255,.075) url(/images/reddit.svg) no-repeat center center; }
-#buttons { white-space:nowrap; padding-left:10px; }
+#buttons { white-space:nowrap; }
 #score { padding:0 7px; font-weight:bold; color:#969696; -webkit-user-select:text; }
 .liked #score { color:#FF8B60; }
 .disliked #score { color:#9494FF; }
-#title { padding:5px 0; -webkit-user-select:text; }
+#title { padding:0 10px 0 5px; -webkit-user-select:text; }
+
+button#submit span { background-image:url(/images/submit.svg); background-position:right center; background-repeat:no-repeat; padding-left:0; padding-right:18px; }
+input#title-input { width:30em; background:-webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(255,255,255,.7)), color-stop(.5, rgba(255,255,255,.8))); border:2px inset rgba(255,255,255,.4); padding:2px; margin:5px; border-radius:5px; }
+input#title-input::-webkit-input-placeholder { color:#555; }
 
 #close { background:none; padding:0; border:1px solid transparent; border-radius:2px; }
 #close img { vertical-align:middle; padding:3px; }

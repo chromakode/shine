@@ -17,6 +17,17 @@
           this._queryInfo({url:url}, callback);
         },
 
+        lookupURLStored: function(url, callback) {
+          var stored = this.getURL(url);
+          if (stored) {
+            // Return our stored data right away, refreshing in the background.
+            callback(stored);
+            this.lookupURL(url);
+          } else {
+            this.lookupURL(url, callback);
+          }
+        },
+
         lookupName: function(name, callback) {
           this._queryInfo({id:name}, callback);
         },
@@ -88,19 +99,23 @@
       };
 
       tabStatus = {
-        add: function(tabId, fullname) {
-          this.tabId[tabId] = fullname;
-          
-          if (!this.fullname[fullname]) {
-            this.fullname[fullname] = [];
+        set: function(tabId, fullname) {
+          if (fullname) {
+            this.tabId[tabId] = fullname;
+            
+            if (!this.fullname[fullname]) {
+              this.fullname[fullname] = [];
+            }
+            this.fullname[fullname].push(tabId);
+          } else {
+            this.tabId[tabId] = true;
           }
-          this.fullname[fullname].push(tabId); 
         },
         
         remove: function(tabId) {
           var fullname = this.tabId[tabId];
-          if (fullname) {
-            delete this.tabId[tabId];
+          delete this.tabId[tabId];
+          if (fullname && fullname !== true) {
             this.fullname[fullname].filter(function(x) {return x != tabId});
             if (!this.fullname[fullname]) {
               delete this.fullname[fullname];
@@ -115,6 +130,10 @@
               chrome.tabs.sendRequest(tabId, {action:'showInfo', info:info});
             });
           }
+        },
+
+        showSubmitOverlay: function(tabId) {
+         chrome.tabs.sendRequest(tabId, {action:'showSubmit'});
         },
         
         tabId: {},
@@ -146,19 +165,24 @@
                          {type:'js',  file:'pageOverlay.js'}], callback);
       }
 
-      function ensureOverlay(tab, info) {
-        console.log('Ensuring overlay for '+tab.id, info);
+      function ensureOverlay(tab, callback) {
         if (!tabStatus.tabId[tab.id]) {
-          addOverlayContent(tab, function() { 
-            tabStatus.add(tab.id, info.name);
-            tabStatus.updateOverlay(info);
+          addOverlayContent(tab, function() {
+            callback();
           });
         } else {
-          tabStatus.updateOverlay(info);
+          callback();
         }
       }
 
-      function checkPageAction(tab) {
+      function addBarOverlay(tab, info) {
+        ensureOverlay(tab, function() {
+          tabStatus.set(tab.id, info.name);
+          tabStatus.updateOverlay(info);
+        });
+      }
+
+      function setPageActionIcon(tab) {
         if (/^http:\/\/.*/.test(tab.url)) {
           var info = redditInfo.url[tab.url];
           if (info) {
@@ -172,10 +196,10 @@
       }
 
       function onTabLoad(tab) {
-        var info = checkPageAction(tab);
+        var info = setPageActionIcon(tab);
         if (info) {
           console.log('Recognized page '+tab.url, info);
-          ensureOverlay(tab, info);
+          addBarOverlay(tab, info);
         }
       }
 
@@ -185,10 +209,19 @@
           chrome.pageAction.setIcon({tabId:tab.id, path:'/images/working'+frame+'.png'});
           frame = (frame + 1) % 6;
         }, 200);
-        redditInfo.lookupURL(tab.url, function(info) {
+        
+        redditInfo.lookupURLStored(tab.url, function(info) {
           window.clearInterval(workingAnimation);
-          chrome.pageAction.setIcon({tabId:tab.id, path:'/images/reddit.png'});
-          ensureOverlay(tab, info);
+          setPageActionIcon(tab);
+          
+          if (info) {
+            addBarOverlay(tab, info);
+          } else {
+            ensureOverlay(tab, function() {
+              tabStatus.set(tab.id);
+              tabStatus.showSubmitOverlay(tab.id);
+            });
+          }
         })
       }
 
@@ -196,7 +229,6 @@
         if (request.action == 'thingClick') {
           console.log('Thing clicked', request);
           redditInfo.setURL(request.url, request.info);
-          redditInfo.lookupName(request.info.name);
         } else if (request.action == 'query') {
           if (request.hasOwnProperty('url')) {
             callback(redditInfo.url[request.url]);
@@ -225,7 +257,7 @@
       chrome.windows.getAll({populate:true}, function(wins) {
         wins.forEach(function(win) {
           win.tabs.forEach(function(tab) {
-            checkPageAction(tab);
+            setPageActionIcon(tab);
           });
         });
       })

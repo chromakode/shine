@@ -58,8 +58,13 @@
       }
 
       function handleData() {
-        info = JSON.parse(decodeURIComponent(location.hash.substr(1)));
-        update();
+        var data = window.location.hash.substr(1);
+        if (data) {
+          info = JSON.parse(decodeURIComponent(data));
+          if (info) {
+            update();
+          }
+        }
       }
 
       $(document).ready(function() {

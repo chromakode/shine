@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="bar.css" type="text/css" />
+    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <script type="text/javascript">
+      function getRandomInt(min, max) {
+	      // via https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Math/random#Examples
+	      return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function randomChoice(items) {
+	      return items[getRandomInt(0, items.length-1)];
+      }
+    
+      function msgJSON(request) {
+        window.top.postMessage(JSON.stringify(request), "*");
+      }
+
+      function submit() {
+        window.top.location = 'http://reddit.com/submit/?resubmit=true'+
+                              '&url='+window.location.hash.substr(1)+
+                              '&title='+encodeURIComponent($('#title-input').val());
+      }
+
+      function update() {
+        $('#title-input').attr('placeholder', function(i, val) {
+          var adjs = ['a clever', 'a snarky', 'a nifty', 'an exciting', 'an alluring', 'a juicy'];
+          var ends = ['Be witty!', 'Be silly!', 'Be nice!', 'Huzzah!', 'Have fun!', 'Good luck!'];
+          return 'Enter '+randomChoice(adjs)+' title to share this page with reddit. '+randomChoice(ends);
+        });
+        
+        window.setTimeout(function() {
+          msgJSON({action:'size', width:$('#bar').outerWidth(), height:$('#bar').outerHeight()});
+        }, 10);
+      }
+
+      $(document).ready(function() {
+        $(window).resize(function() {
+          update();
+        });
+      
+        $('#submit').click(submit);
+        $('#title-input').keypress(function(e) {
+          if (e.which == 13) {
+            submit();
+          }
+        });
+        
+        $('#close').click(function() {
+          msgJSON({action:'close'});
+        });
+
+        update();
+      });
+    </script>
+  </head>
+  <body>
+    <div id="bar">
+        <a id="logo" href="http://www.reddit.com" target="_top"></a>
+        <input id="title-input">
+        <div id="buttons">
+          <button id="submit"><span>Submit</span></button>
+          <button id="close" ><img src="/images/close.svg" alt="close"/></button>
+        </div>
+    </div>
+  </body>
+</html>
