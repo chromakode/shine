@@ -101,7 +101,7 @@
           var fullname = this.tabId[tabId];
           if (fullname) {
             delete this.tabId[tabId];
-            this.fullname[fullname].filter(function(x) {return x != tabID});
+            this.fullname[fullname].filter(function(x) {return x != tabId});
             if (!this.fullname[fullname]) {
               delete this.fullname[fullname];
             }
