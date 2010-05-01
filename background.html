@@ -158,14 +158,24 @@
         }
       }
 
-      function onTabLoad(tab) {
+      function checkPageAction(tab) {
         if (/^http:\/\/.*/.test(tab.url)) {
-          chrome.pageAction.show(tab.id);
           var info = redditInfo.url[tab.url];
           if (info) {
-            console.log('Recognized page '+tab.url, info);
-            ensureOverlay(tab, info);
+            chrome.pageAction.setIcon({tabId:tab.id, path:'/images/reddit.png'});
+          } else { 
+            chrome.pageAction.setIcon({tabId:tab.id, path:'/images/reddit-inactive.png'});
           }
+          chrome.pageAction.show(tab.id);
+          return info;
+        }
+      }
+
+      function onTabLoad(tab) {
+        var info = checkPageAction(tab);
+        if (info) {
+          console.log('Recognized page '+tab.url, info);
+          ensureOverlay(tab, info);
         }
       }
 
@@ -210,6 +220,17 @@
         }
       });
       chrome.pageAction.onClicked.addListener(onActionClicked);
+
+      // Show page action for existing tabs.
+      chrome.windows.getAll({populate:true}, function(wins) {
+        wins.forEach(function(win) {
+          win.tabs.forEach(function(tab) {
+            checkPageAction(tab);
+          });
+        });
+      })
+
+      console.log("Shine loaded.");
     </script>
   </head>
   <body>
