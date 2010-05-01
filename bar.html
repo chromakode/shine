@@ -3,11 +3,8 @@
   <head>
     <link rel="stylesheet" href="bar.css" type="text/css" />
     <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="utils.js"></script>
     <script type="text/javascript">
-      function msgJSON(request) {
-        window.top.postMessage(JSON.stringify(request), "*");
-      }
-
       function likeDelta(likes) {
         if (likes == true) {
           return 1;
@@ -74,12 +71,7 @@
         });
       
         $('#comments').click(function(e) {
-          var dest = 'http://reddit.com'+info.permalink;
-          if (e.button == 1) {
-            window.open(dest);
-          } else {
-            window.top.location = dest;
-          }
+          clickOpenURL(e, 'http://reddit.com'+info.permalink);
         })
         
         $('#like').click(function() {

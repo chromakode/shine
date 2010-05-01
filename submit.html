@@ -3,24 +3,12 @@
   <head>
     <link rel="stylesheet" href="bar.css" type="text/css" />
     <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="utils.js"></script>
     <script type="text/javascript">
-      function getRandomInt(min, max) {
-	      // via https://developer.mozilla.org/en/Core_JavaScript_1.5_Reference/Global_Objects/Math/random#Examples
-	      return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
-
-      function randomChoice(items) {
-	      return items[getRandomInt(0, items.length-1)];
-      }
-    
-      function msgJSON(request) {
-        window.top.postMessage(JSON.stringify(request), "*");
-      }
-
-      function submit() {
-        window.top.location = 'http://reddit.com/submit/?resubmit=true'+
-                              '&url='+window.location.hash.substr(1)+
-                              '&title='+encodeURIComponent($('#title-input').val());
+      function submit(e) {
+        clickOpenURL(e, 'http://reddit.com/submit/?resubmit=true'+
+                        '&url='+window.location.hash.substr(1)+
+                        '&title='+encodeURIComponent($('#title-input').val()));
       }
 
       function update() {
@@ -43,7 +31,7 @@
         $('#submit').click(submit);
         $('#title-input').keypress(function(e) {
           if (e.which == 13) {
-            submit();
+            submit(e);
           }
         });
         
