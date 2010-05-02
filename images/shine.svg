@@ -22,6 +22,21 @@
   <defs
      id="defs3113">
     <linearGradient
+       id="linearGradient3753">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3755" />
+      <stop
+         id="stop3761"
+         offset="0.13333334"
+         style="stop-color:#000000;stop-opacity:0.49803922;" />
+      <stop
+         style="stop-color:#000000;stop-opacity:0;"
+         offset="1"
+         id="stop3757" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient5133">
       <stop
          style="stop-color:#ed4000;stop-opacity:0.58823532;"
@@ -490,18 +505,6 @@
          offset="1"
          id="stop4403-4" />
     </linearGradient>
-    <filter
-       inkscape:collect="always"
-       id="filter4485"
-       x="-0.27233553"
-       width="1.5446711"
-       y="-0.50637395"
-       height="2.0127479">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.53498907"
-         id="feGaussianBlur4487" />
-    </filter>
     <inkscape:perspective
        id="perspective4505"
        inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
@@ -941,18 +944,16 @@
          stdDeviation="0.68129857"
          id="feGaussianBlur5225" />
     </filter>
-    <filter
+    <radialGradient
        inkscape:collect="always"
-       id="filter3764"
-       x="-0.40748904"
-       width="1.8149781"
-       y="-1.7463804"
-       height="4.4927608">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="1.8008638"
-         id="feGaussianBlur3766" />
-    </filter>
+       xlink:href="#linearGradient3753"
+       id="radialGradient3759"
+       cx="-14.849242"
+       cy="29.792"
+       fx="-14.849242"
+       fy="29.792"
+       r="13.788582"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -962,8 +963,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2"
-     inkscape:cx="-2.6754213"
-     inkscape:cy="17.627508"
+     inkscape:cx="28.086715"
+     inkscape:cy="14.132478"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:grid-bbox="true"
@@ -993,7 +994,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -1001,6 +1002,16 @@
      id="layer1"
      inkscape:label="Layer 1"
      inkscape:groupmode="layer">
+    <path
+       sodipodi:type="arc"
+       style="color:#000000;fill:url(#radialGradient3759);fill-opacity:1.0;fill-rule:evenodd;stroke:none;stroke-width:8;marker:none;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;opacity:0.43049326999999998"
+       id="path2979"
+       sodipodi:cx="-14.849242"
+       sodipodi:cy="29.792"
+       sodipodi:rx="13.788582"
+       sodipodi:ry="13.788582"
+       d="m -1.0606604,29.792 a 13.788582,13.788582 0 1 1 -27.5771636,0 13.788582,13.788582 0 1 1 27.5771636,0 z"
+       transform="matrix(1.6282051,0,0,1.301282,48.177612,-10.259989)" />
     <g
        id="g4149"
        transform="matrix(2.6456693,0,0,2.6456693,-130.33858,-10.388976)">

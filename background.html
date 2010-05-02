@@ -54,7 +54,7 @@
         },
 
         _thingAction: function(action, data, callback) {
-          if (!this.modhash) {
+          if (!this.isLoggedIn()) {
             this.lookupName(data.id, function() {
               // Retry after we've stashed a modhash.
               redditInfo._thingAction(action, data, callback);
@@ -93,6 +93,10 @@
           this._thingAction('unsave', {id:fullname}, callback);
         },
 
+        isLoggedIn: function() {
+          return this.modhash != null && this.modhash != "";
+        },
+
         modhash: null,
         url: {}, 
         fullname: {}
@@ -127,8 +131,15 @@
           if (this.fullname[info.name]) {
             this.fullname[info.name].forEach(function(tabId) {
               console.log("Sending show overlay command for", info);
-              chrome.tabs.sendRequest(tabId, {action:'showInfo', info:info});
+              chrome.tabs.sendRequest(tabId, {action:'showInfo', info:info, loggedIn:redditInfo.isLoggedIn()});
             });
+          }
+        },
+
+        updateTab: function(tabId) {
+          var fullname = tabStatus.tabId[tabId];
+          if (fullname && fullname !== true) {
+            redditInfo.lookupName(fullname);
           }
         },
 
@@ -251,6 +262,9 @@
           onTabLoad(tab);
         }
       });
+
+      chrome.tabs.onSelectionChanged.addListener(tabStatus.updateTab);
+      
       chrome.pageAction.onClicked.addListener(onActionClicked);
 
       // Show page action for existing tabs.

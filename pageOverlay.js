@@ -54,13 +54,13 @@ $.extend(shineBar, {
     }, this), 10);
   },
 
-  display: function(info) {
+  display: function(info, loggedIn) {
     if (info) {
       if (!this.info || this.info.name == info.name) {
         this.info = info;
         // Another chrome bug prevents us from properly using postMessage on our child iframe, so we resort to another hack:
         // We'll change the height of the iframe ever so slightly (not displayed), and pick up the resize event inside the frame.
-        this._display('bar.html#'+encodeURIComponent(JSON.stringify(info)));
+        this._display('bar.html#'+encodeURIComponent(JSON.stringify({info:info, loggedIn:loggedIn})));
       }
     } else {
       this.info = null;
@@ -76,7 +76,7 @@ $.extend(shineBar, {
 function onRequest(request, sender, callback) {
   if (request.action == 'showInfo') {
     console.log('Shine showInfo update received:', request.info);
-    shineBar.display(request.info);
+    shineBar.display(request.info, request.loggedIn);
   } else if (request.action == 'showSubmit') {
     shineBar.showSubmit();
   }
@@ -94,7 +94,7 @@ function receiveMessage(event) {
       shineBar.show();
     } else if (request.action == 'close') {
       shineBar.hide(true);
-    } else if ($.inArray(request.action,  ['vote', 'save', 'unsave']) != -1) {
+    } else if ($.inArray(request.action, ['vote', 'save', 'unsave']) != -1) {
       request.fullname = shineBar.info.name;
 	    chrome.extension.sendRequest(request);
     }

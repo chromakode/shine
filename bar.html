@@ -5,6 +5,8 @@
     <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
     <script type="text/javascript" src="utils.js"></script>
     <script type="text/javascript">
+      var info, loggedIn;
+      
       function likeDelta(likes) {
         if (likes == true) {
           return 1;
@@ -32,7 +34,13 @@
         }
       }
     
-      function update() {      
+      function update() {
+        if (loggedIn) {
+          $('#bar').removeClass('logged-out').addClass('logged-in');
+        } else {
+          $('#bar').removeClass('logged-in').addClass('logged-out');
+        }
+      
         if (info.likes == true) {
           $('#bar').removeClass('disliked').addClass('liked');
         } else if (info.likes == false) {
@@ -57,7 +65,13 @@
       function handleData() {
         var data = window.location.hash.substr(1);
         if (data) {
-          info = JSON.parse(decodeURIComponent(data));
+          data = JSON.parse(decodeURIComponent(data));
+          if (data.hasOwnProperty('loggedIn')) {
+            loggedIn = data.loggedIn;
+          }
+          if (data.hasOwnProperty('info')) {
+            info = data.info;
+          }
           if (info) {
             update();
           }
@@ -86,6 +100,10 @@
           toggleSaved();
         });
 
+        $('#login').click(function () {
+          window.open('http://reddit.com/login/');
+        });
+
         $('#close').click(function() {
           msgJSON({action:'close'});
         });
@@ -99,10 +117,11 @@
         <a id="logo" href="http://www.reddit.com" target="_top"></a>
         <span id="score">?</span> <span id="title"></span>
         <div id="buttons">
-          <button id="like"><span>Like</span></button>
-          <button id="dislike"><span>Dislike</span></button>
+          <button id="like" class="if-logged-in"><span>Like</span></button>
+          <button id="dislike" class="if-logged-in"><span>Dislike</span></button>
           <button id="comments"><span>?</span></button>
-          <button id="save"><span></span></button>
+          <button id="save" class="if-logged-in"><span></span></button>
+          <button id="login" class="if-not-logged-in"><span>Log in...</span></button>
           <button id="close" ><img src="/images/close.svg" alt="close"/></button>
         </div>
     </div>

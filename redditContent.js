@@ -40,4 +40,5 @@ function thingClicked() {
 $(document).ready(function() {
   console.log('Shine reddit content handler running.');
 	$('.thing a.title').click(thingClicked);
+	console.log($('script').first().text().match(/modhash:\s*'(\w+)'/)[1]);
 });
