@@ -10,26 +10,7 @@
         
         setURL: function(url, info) {
           this.url[url] = info;
-          this.fullname[info.fullname] = info;
-        },
-
-        lookupURL: function(url, callback) {
-          this._queryInfo({url:url}, callback);
-        },
-
-        lookupURLStored: function(url, callback) {
-          var stored = this.getURL(url);
-          if (stored) {
-            // Return our stored data right away, refreshing in the background.
-            callback(stored);
-            this.lookupURL(url);
-          } else {
-            this.lookupURL(url, callback);
-          }
-        },
-
-        lookupName: function(name, callback) {
-          this._queryInfo({id:name}, callback);
+          this.fullname[info.name] = info;
         },
 
         _queryInfo: function(params, callback) {
@@ -51,6 +32,34 @@
               if (callback) { callback(null); }
             }
           });
+        },
+
+        lookupURL: function(url, callback) {
+          this._queryInfo({url:url}, callback);
+        },
+
+
+        lookupName: function(name, callback) {
+          this._queryInfo({id:name}, callback);
+        },
+
+        _storedLookup: function(key, array, lookup, callback) {
+          var stored = array[key];
+          if (stored) {
+            // Return our stored data right away, refreshing in the background.
+            callback(stored);
+            lookup(key);
+          } else {
+            lookup(key, callback);
+          }
+        },
+
+        lookupURLStored: function(url, callback) {
+          this._storedLookup(url, this.url, $.proxy(this.lookupURL, this), callback);
+        },
+
+        lookupNameStored: function(name, callback) {
+          this._storedLookup(name, this.fullname, $.proxy(this.lookupName, this), callback);
         },
 
         _thingAction: function(action, data, callback) {
@@ -127,11 +136,15 @@
           }
         },
 
+        _showInfo: function(tabId, info) {
+          chrome.tabs.sendRequest(tabId, {action:'showInfo', info:info, loggedIn:redditInfo.isLoggedIn()});
+        },
+
         updateOverlay: function(info) {
           if (this.fullname[info.name]) {
             this.fullname[info.name].forEach(function(tabId) {
               console.log("Sending show overlay command for", info);
-              chrome.tabs.sendRequest(tabId, {action:'showInfo', info:info, loggedIn:redditInfo.isLoggedIn()});
+              tabStatus._showInfo(tabId, info);
             });
           }
         },
@@ -139,7 +152,10 @@
         updateTab: function(tabId) {
           var fullname = tabStatus.tabId[tabId];
           if (fullname && fullname !== true) {
-            redditInfo.lookupName(fullname);
+            redditInfo.lookupNameStored(fullname, function(info) {
+              console.log("Updating tab", tabId);
+              tabStatus._showInfo(tabId, info);
+            });
           }
         },
 
@@ -240,6 +256,9 @@
         if (request.action == 'thingClick') {
           console.log('Thing clicked', request);
           redditInfo.setURL(request.url, request.info);
+        } else if (request.action = 'modhashUpdate') {
+          console.log('Scraped modhash', request);
+          redditInfo.modhash = request.modhash;
         } else if (request.action == 'query') {
           if (request.hasOwnProperty('url')) {
             callback(redditInfo.url[request.url]);
