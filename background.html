@@ -256,7 +256,7 @@
         if (request.action == 'thingClick') {
           console.log('Thing clicked', request);
           redditInfo.setURL(request.url, request.info);
-        } else if (request.action = 'modhashUpdate') {
+        } else if (request.action == 'modhashUpdate') {
           console.log('Scraped modhash', request);
           redditInfo.modhash = request.modhash;
         } else if (request.action == 'query') {
