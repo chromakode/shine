@@ -1,8 +1,10 @@
 function clickOpenURL(event, url) {
   if (event.button == 1) {
     window.open(url);
+    return false;
   } else {
     window.top.location = url;
+    return true;
   }
 }
 
