@@ -23,6 +23,7 @@ button#login span { background-image:url(/images/login.svg); }
 .liked #score { color:#FF8B60; }
 .disliked #score { color:#9494FF; }
 #title { padding:0 10px 0 5px; -webkit-user-select:text; }
+#subreddit { padding:0 10px 0 5px; -webkit-user-select:text; }
 
 .logged-out .if-logged-in { display:none; }
 .logged-in .if-not-logged-in { display:none; }
