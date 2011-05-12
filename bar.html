@@ -57,10 +57,10 @@
         $('#score').text(info.score);
         $('#title').text(info.title);
         if (info.subreddit) {
-			$('#subreddit').text('[' + info.subreddit + ']');
-		} else {
-			$('#bar').removeClass('subreddit');
-		}
+          $('#subreddit').text('[' + info.subreddit + ']');
+        } else {
+          $('#bar').removeClass('subreddit');
+        }
         $('#comments span').text(info.num_comments);
 
         window.setTimeout(function() {
