@@ -55,7 +55,12 @@
           $('#bar').removeClass('saved');
         }
         $('#score').text(info.score);
-        $('#title').text(info.title)
+        $('#title').text(info.title);
+        if (info.subreddit) {
+			$('#subreddit').text('[' + info.subreddit + ']');
+		} else {
+			$('#bar').removeClass('subreddit');
+		}
         $('#comments span').text(info.num_comments);
 
         window.setTimeout(function() {
@@ -125,7 +130,7 @@
   <body>
     <div id="bar">
         <a id="logo" href="http://www.reddit.com" target="_top"></a>
-        <span id="score">?</span> <span id="title"></span>
+        <span id="score">?</span> <span id="title"></span> <span id="subreddit"></span>
         <div id="buttons">
           <button id="like" class="if-logged-in"><span>Like</span></button>
           <button id="dislike" class="if-logged-in"><span>Dislike</span></button>
