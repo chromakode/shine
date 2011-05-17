@@ -40,8 +40,9 @@ function thingClicked() {
 }
 
 $(document).ready(function() {
+  const redditScript = 'var reddit';
   console.log('Shine reddit content handler running.');
 	$('.thing a.title').click(thingClicked);
-  var modhash = $('script').first().text().match(/modhash:\s*'(\w*)'/)[1];
+  var modhash = $('script:contains('+redditScript+')').text().match(/modhash:\s*'(\w*)'/)[1];
   chrome.extension.sendRequest({action:'modhashUpdate', modhash:modhash});
 });
