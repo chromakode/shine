@@ -21,10 +21,12 @@
             data: params,
             success: function(resp) {
               if (resp.data) {
-                var info = resp.data.children[0].data;
                 redditInfo.modhash = resp.data.modhash;
-                redditInfo.setURL(info.url, info);
-                tabStatus.updateOverlay(info);
+                if (!resp.data.children.length) {
+                  var info = resp.data.children[0].data;
+                  redditInfo.setURL(info.url, info);
+                  tabStatus.updateOverlay(info);
+                }
                 if (callback) { callback(info); }
               }
             },
