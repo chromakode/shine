@@ -19,7 +19,7 @@
   "content_scripts": [
     {
       "matches": ["http://*.reddit.com/*"],
-      "js": ["jquery-1.4.2.min.js", "redditContent.js"]
+      "js": ["jquery.js", "redditContent.js"]
     }
   ]
 }

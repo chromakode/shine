@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="jquery.js"></script>
     <script>
       redditInfo = {
         getURL: function(url) {
@@ -247,7 +247,7 @@
       }
 
       function addOverlayContent(tab, callback) {
-        addContent(tab, [{type:'js',  file:'jquery-1.4.2.min.js'},
+        addContent(tab, [{type:'js',  file:'jquery.js'},
                          {type:'css', file:'pageOverlay.css'},
                          {type:'js',  file:'pageOverlay.js'}], callback)
       }
