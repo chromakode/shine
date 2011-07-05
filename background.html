@@ -20,35 +20,35 @@
             success: function(resp) {
               if (resp.data) {
                 var newMsgCount = 0;
-                var notifText = '';
-                var notifTitle = '';
-                var newIdx = -1;
+                var newIdx = null;
 
-                if (redditInfo.lastMailCheckTime != null) {
-                  for (i = 0; i < resp.data.children.length; i++) {
-                    if (new Date(resp.data.children[i].data.created_utc*1000) >
-                        redditInfo.lastMailCheckTime) {
-                      newMsgCount++;
-                      if (newIdx == -1) { newIdx = i; }
-                    }
-                  }
-
-                  if (newMsgCount == 1) {
-                    notifTitle = resp.data.children[newIdx].data.author + ': ' +
-                      resp.data.children[newIdx].data.subject;
-                    notifText = resp.data.children[newIdx].data.body;
-                  } else if (newMsgCount > 1) {
-                    notifTitle = 'Reddit: New Messages!';
-                    notifText = 'You have ' + resp.data.children.length + ' new messages.';
+                for (i = 0; i < resp.data.children.length; i++) {
+                  var messageTime = resp.data.children[i].data.created_utc*1000;
+                  if (!!redditInfo.lastMailCheckTime || messageTime > redditInfo.lastMailCheckTime) {
+                    newMsgCount++;
+                    if (!newIdx) { newIdx = i; }
                   }
                 }
+                
+
+                var notifyTitle, notifyText;
+                if (newMsgCount == 1) {
+                  notifyTitle = resp.data.children[newIdx].data.author + ': ' +
+                    resp.data.children[newIdx].data.subject;
+                  notifyText = resp.data.children[newIdx].data.body;
+                } else if (newMsgCount > 1) {
+                  notifyTitle = 'reddit: new messages!';
+                  notifyText = 'You have ' + resp.data.children.length + ' new messages.';
+                }
+                
+                console.log('New messages: ', newMsgCount);
 
                 if (newMsgCount > 0) {
                   webkitNotifications.createNotification(
-                      'images/reddit_mail_icon.svg',
-                      notifTitle,
-                      notifText
-                      ).show();
+                    'images/reddit_mail_icon.svg',
+                    notifyTitle,
+                    notifyText
+                  ).show();
                 }
 
                 redditInfo.lastMailCheckTime = new Date();
