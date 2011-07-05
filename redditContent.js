@@ -9,43 +9,43 @@ function scrapeThingInfo(thing) {
 	
 	info.title = thing.find('a.title').text();
 
-  var entry = thing.find(".entry");
+  var entry = thing.find(".entry")
   if (entry.hasClass('likes')) {
-    info.likes = true;
+    info.likes = true
   } else if (entry.hasClass('dislikes')) {
-    info.likes = false;
+    info.likes = false
   } else {
-    info.likes = null;
+    info.likes = null
   }
 
-  info.saved = thing.hasClass('saved');
+  info.saved = thing.hasClass('saved')
 
-  info.score = parseInt(thing.find(".score:visible").text());
+  info.score = parseInt(thing.find(".score:visible").text())
   
-  info.subreddit = thing.find('a.subreddit').text();
+  info.subreddit = thing.find('a.subreddit').text()
 
-  info.num_comments = parseInt(thing.find('.comments').text()) || 0;
+  info.num_comments = parseInt(thing.find('.comments').text()) || 0
 
-  info.permalink = thing.find('.comments').attr('href').match(/.*reddit.com(\/.+)/)[1];
+  info.permalink = thing.find('.comments').attr('href').match(/.*reddit.com(\/.+)/)[1]
 
-  console.log('Scraped info from page:', info);
-  return info;
+  console.log('Scraped info from page:', info)
+  return info
 }
 
 function thingClicked() {
   var info = scrapeThingInfo($(this).parents('.thing'));
   if (info) {
-    chrome.extension.sendRequest({action:'thingClick', url:this.href, info:info});
+    chrome.extension.sendRequest({action:'thingClick', url:this.href, info:info})
   }
 }
 
 $(document).ready(function() {
-  const redditScript = 'var reddit';
-  console.log('Shine reddit content handler running.');
-  $('.thing a.title').click(thingClicked);
-  var match = $('script:contains('+redditScript+')').text().match(/modhash:\s*'(\w*)'/);
+  const redditScript = 'var reddit'
+  console.log('Shine reddit content handler running.')
+  $('.thing a.title').click(thingClicked)
+  var match = $('script:contains('+redditScript+')').text().match(/modhash:\s*'(\w*)'/)
   if (match) {
-    var modhash = match[1];
-    chrome.extension.sendRequest({action:'modhashUpdate', modhash:modhash});
+    var modhash = match[1]
+    chrome.extension.sendRequest({action:'modhashUpdate', modhash:modhash})
   }
-});
+})
