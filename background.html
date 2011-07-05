@@ -150,12 +150,20 @@
         unsave: function(fullname, callback) {
           this._thingAction('unsave', {id:fullname}, callback);
         },
-
+        
         isLoggedIn: function() {
+          // TODO: check for cookie
           return this.modhash != null && this.modhash != "";
         },
 
-        modhash: null,
+        init: function() {
+          this.modhash = localStorage['modhash'];
+        },
+          
+        storeModhash: function(modhash) {
+          localStorage['modhash'] = this.modhash = modhash;
+        },
+
         url: {}, 
         fullname: {},
         lastMailCheckTime: null,
@@ -312,7 +320,7 @@
           redditInfo.setURL(request.url, request.info);
         } else if (request.action == 'modhashUpdate') {
           console.log('Scraped modhash', request);
-          redditInfo.modhash = request.modhash;
+          redditInfo.storeModhash(request.modhash);
         } else if (request.action == 'query') {
           if (request.hasOwnProperty('url')) {
             callback(redditInfo.url[request.url]);
@@ -354,6 +362,7 @@
       })
 
       console.log("Shine loaded.");
+      redditInfo.init();
     </script>
   </head>
   <body>
