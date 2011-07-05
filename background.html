@@ -13,6 +13,53 @@
           this.fullname[info.name] = info;
         },
 
+        checkMail: function(params, callback) {
+          console.log('Checking reddit mail..');
+          $.ajax({
+            url: 'http://www.reddit.com/message/unread/.json',
+            success: function(resp) {
+              if (resp.data) {
+                var newMsgCount = 0;
+                var notifText = '';
+                var notifTitle = '';
+                var newIdx = -1;
+
+                if (redditInfo.lastMailCheckTime != null) {
+                  for (i = 0; i < resp.data.children.length; i++) {
+                    if (new Date(resp.data.children[i].data.created_utc*1000) >
+                        redditInfo.lastMailCheckTime) {
+                      newMsgCount++;
+                      if (newIdx == -1) { newIdx = i; }
+                    }
+                  }
+
+                  if (newMsgCount == 1) {
+                    notifTitle = resp.data.children[newIdx].data.author + ': ' +
+                      resp.data.children[newIdx].data.subject;
+                    notifText = resp.data.children[newIdx].data.body;
+                  } else if (newMsgCount > 1) {
+                    notifTitle = 'Reddit: New Messages!';
+                    notifText = 'You have ' + resp.data.children.length + ' new messages.';
+                  }
+                }
+
+                if (newMsgCount > 0) {
+                  webkitNotifications.createNotification(
+                      'images/reddit_mail_icon.svg',
+                      notifTitle,
+                      notifText
+                      ).show();
+                }
+
+                redditInfo.lastMailCheckTime = new Date();
+              }
+            },
+            error: function() {
+                console.log('Reddit mail check failed!');
+            }
+          });
+        },
+
         _queryInfo: function(params, callback) {
           console.log('Performing AJAX info call for ', params);
           params.limit = 1;
@@ -110,7 +157,8 @@
 
         modhash: null,
         url: {}, 
-        fullname: {}
+        fullname: {},
+        lastMailCheckTime: null,
       };
 
       tabStatus = {
@@ -279,6 +327,10 @@
           redditInfo[request.action](request.fullname, callback);
         }
       }
+
+      window.setInterval(function() {
+          redditInfo.checkMail();
+      }, 300000);
 
       chrome.extension.onRequest.addListener(onRequest);
       chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
