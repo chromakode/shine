@@ -66,7 +66,7 @@ function receiveMessage(event) {
       shineBar.hide(true)
     } else if ($.inArray(request.action, ['vote', 'save', 'unsave']) != -1) {
       request.fullname = shineBar.info.name
-	    chrome.extension.sendRequest(request)
+      chrome.extension.sendRequest(request)
     }
   }
 }

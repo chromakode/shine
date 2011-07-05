@@ -1,13 +1,13 @@
 function scrapeThingInfo(thing) {
   var info = {};
 
-	fullnameMatch = thing.attr('class').match(/id-(\w+)/);
-	if (!fullnameMatch) {
-	  return false;
-	}
-	info.name = fullnameMatch[1];
-	
-	info.title = thing.find('a.title').text();
+  fullnameMatch = thing.attr('class').match(/id-(\w+)/);
+  if (!fullnameMatch) {
+    return false;
+  }
+  info.name = fullnameMatch[1];
+  
+  info.title = thing.find('a.title').text();
 
   var entry = thing.find(".entry")
   if (entry.hasClass('likes')) {
