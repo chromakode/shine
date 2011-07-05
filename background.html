@@ -14,6 +14,7 @@
         },
 
         checkMail: function(params, callback) {
+          if (!redditInfo.isLoggedIn()) { return; }
           console.log('Checking reddit mail..');
           $.ajax({
             url: 'http://www.reddit.com/message/unread/.json',
@@ -363,6 +364,7 @@
 
       console.log("Shine loaded.");
       redditInfo.init();
+      redditInfo.checkMail();
     </script>
   </head>
   <body>
