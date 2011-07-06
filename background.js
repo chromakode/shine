@@ -312,24 +312,31 @@ function onActionClicked(tab) {
 }
 
 function onRequest(request, sender, callback) {
-  if (request.action == 'thingClick') {
-    console.log('Thing clicked', request)
-    redditInfo.setURL(request.url, request.info)
-  } else if (request.action == 'modhashUpdate') {
-    console.log('Scraped modhash', request)
-    redditInfo.storeModhash(request.modhash)
-  } else if (request.action == 'query') {
-    if (request.hasOwnProperty('url')) {
-      callback(redditInfo.url[request.url])
-    } else if (request.hasOwnProperty('fullname')) {
-      callback(redditInfo.fullname[request.fullname])
-    }
-  } else if (request.action == 'vote') {
-    console.log('Voting', request)
-    redditInfo.vote(request.fullname, request.likes, callback)
-  } else if ($.inArray(request.action, ['save', 'unsave']) !=-1) {
-    console.log('Modifying', request)
-    redditInfo[request.action](request.fullname, callback)
+  switch (request.action) {
+    case 'thingClick':
+      console.log('Thing clicked', request)
+      redditInfo.setURL(request.url, request.info)
+      break
+    case 'modhashUpdate':
+      console.log('Scraped modhash', request)
+      redditInfo.storeModhash(request.modhash)
+      break
+    case 'query':
+      if (request.hasOwnProperty('url')) {
+        callback(redditInfo.url[request.url])
+      } else if (request.hasOwnProperty('fullname')) {
+        callback(redditInfo.fullname[request.fullname])
+      }
+      break
+    case 'vote':
+      console.log('Voting', request)
+      redditInfo.vote(request.fullname, request.likes, callback)
+      break
+    case 'save':
+    case 'unsave':
+      console.log('Modifying', request)
+      redditInfo[request.action](request.fullname, callback)
+      break
   }
 }
 
