@@ -66,10 +66,10 @@ redditInfo = {
       success: function(resp) {
         if (resp.data) {
           redditInfo.modhash = resp.data.modhash
-          if (!resp.data.children.length) {
+          if (resp.data.children.length) {
             var info = resp.data.children[0].data
             redditInfo.setURL(info.url, info)
-            tabStatus.updateOverlay(info)
+            barStatus.updateInfo(info)
           }
           if (callback) { callback(info) }
         }
@@ -101,11 +101,11 @@ redditInfo = {
   },
 
   lookupURLStored: function(url, callback) {
-    this._storedLookup(url, this.url, $.proxy(this.lookupURL, this), callback)
+    this._storedLookup(url, this.url, this.lookupURL.bind(this), callback)
   },
 
   lookupNameStored: function(name, callback) {
-    this._storedLookup(name, this.fullname, $.proxy(this.lookupName, this), callback)
+    this._storedLookup(name, this.fullname, this.lookupName.bind(this), callback)
   },
 
   _thingAction: function(action, data, callback) {
@@ -150,7 +150,7 @@ redditInfo = {
   
   isLoggedIn: function() {
     // TODO: check for cookie
-    return this.modhash != null && this.modhash != ""
+    return this.modhash != null && this.modhash != ''
   },
 
   init: function() {
@@ -167,101 +167,128 @@ redditInfo = {
 }
 
 tabStatus = {
-  set: function(tabId, fullname) {
-    if (fullname) {
-      this.tabId[tabId] = fullname
-      
-      if (!this.fullname[fullname]) {
-        this.fullname[fullname] = []
-      }
-      this.fullname[fullname].push(tabId)
-    } else {
-      this.tabId[tabId] = true
+  tabId: {},
+
+  add: function(port) {
+    var tabId = port.sender.tab.id,
+        tabData = {port:port}
+    console.log('Tab added', tabId)
+    this.tabId[tabId] = tabData
+    port.onDisconnect.addListener(this.remove.bind(this, tabId))
+  },
+
+  addBar: function(tabId, bar) {
+    var tabData = this.tabId[tabId]
+    if (tabData) {
+      tabData.bar = bar
     }
   },
-  
+
   remove: function(tabId) {
-    var fullname = this.tabId[tabId]
+    console.log('Tab removed', tabId)
+    var fullname = this.tabId[tabId].fullname
     delete this.tabId[tabId]
-    if (fullname && fullname !== true) {
-      this.fullname[fullname].filter(function(x) {return x != tabId})
-      if (!this.fullname[fullname]) {
+  },
+
+  _showInfo: function(tabId, fullname) {
+    this.tabId[tabId].port.postMessage({
+      action: 'showInfo',
+      fullname: fullname
+    })
+  },
+  
+  updateTab: function(tabId) {
+    var tabData = this.tabId[tabId]
+    if (tabData && tabData.bar) {
+      console.log('Updating tab', tabId)
+      barStatus.update(tabData.bar)
+    }
+  },
+
+  showInfo: function(tabId, fullname) {
+    this._showInfo(tabId, fullname)
+  },
+
+  showSubmit: function(tabId) {
+    chrome.tabs.sendRequest(tabId, {action:'showSubmit'})
+  }
+}
+
+barStatus = {
+  fullname: {},
+
+  add: function(port, fullname) {
+    var barData = {port:port, fullname:fullname}
+    console.log('Bar added', barData)
+    if (!this.fullname[fullname]) {
+      this.fullname[fullname] = []
+    }
+    this.fullname[fullname].push(barData)
+    port.onMessage.addListener(this.handleCommand.bind(this, barData))
+    port.onDisconnect.addListener(this.remove.bind(this, barData))
+    tabStatus.addBar(port.sender.tab.id, barData)
+  },
+
+  remove: function(barData) {
+    console.log('Bar removed', barData)
+    var fullname = barData.fullname
+    if (fullname) {
+      var bars = this.fullname[fullname],
+          idx = bars.indexOf(barData)
+      if (~idx) { bars.splice(idx, 1) }
+      if (!bars.length) {
         delete this.fullname[fullname]
       }
     }
   },
 
-  _showInfo: function(tabId, info) {
-    chrome.tabs.sendRequest(tabId, {action:'showInfo', info:info, loggedIn:redditInfo.isLoggedIn()})
-  },
-
-  updateOverlay: function(info) {
-    if (this.fullname[info.name]) {
-      this.fullname[info.name].forEach(function(tabId) {
-        console.log("Sending show overlay command for", info)
-        tabStatus._showInfo(tabId, info)
+  update: function(barData, stored) {
+    var lookup = stored ? 'lookupNameStored' : 'lookupName'
+    redditInfo[lookup](barData.fullname, function(info) {
+      console.log('Updating bar', barData)
+      barData.port.postMessage({
+        action: 'update',
+        info: info,
+        loggedIn: redditInfo.isLoggedIn()
       })
-    }
-  },
-
-  updateTab: function(tabId) {
-    var fullname = tabStatus.tabId[tabId]
-    if (fullname && fullname !== true) {
-      redditInfo.lookupNameStored(fullname, function(info) {
-        console.log("Updating tab", tabId)
-        tabStatus._showInfo(tabId, info)
-      })
-    }
-  },
-
-  showSubmitOverlay: function(tabId) {
-   chrome.tabs.sendRequest(tabId, {action:'showSubmit'})
+    }.bind(this))
   },
   
-  tabId: {},
-  fullname: {}
-}
-
-function addContent(tab, pieces, callback) {
-  var piece = pieces.shift()
-  if (piece) {
-    console.log('Injecting', piece)
-    if (piece.type == 'js') {
-      var inject = chrome.tabs.executeScript
-    } else if (piece.type == 'css') {
-      var inject = chrome.tabs.insertCSS
+  updateInfo: function(info) {
+    if (this.fullname[info.name]) {
+      this.fullname[info.name].forEach(function(barData) {
+        console.log('Sending updated info to bar', barData, info)
+        barData.port.postMessage({
+          action: 'update',
+          info: info,
+          loggedIn: redditInfo.isLoggedIn()
+        })
+      }, this)
     }
-    delete piece.type
-    
-    inject(tab.id, piece, function() {
-      addContent(tab, pieces, callback)
-    })
-  } else {
-    if (callback) { callback() }
+  },
+
+  handleCommand: function(barData, msg) {
+    console.log('Received message from bar', barData, msg)
+    var updateAfter = function(success) {
+      if (!success) {
+        this.update.bind(this, barData)
+      }
+    }
+    switch (msg.action) {
+      case 'update':
+        this.update(barData, msg.useStored)
+        break
+      case 'vote':
+        console.log('Voting', msg)
+        redditInfo.vote(barData.fullname, msg.likes, updateAfter)
+        break
+      case 'save':
+      case 'unsave':
+        console.log('Modifying', msg)
+        redditInfo[msg.action](barData.fullname, updateAfter)
+        break
+      }
   }
-}
-
-function addOverlayContent(tab, callback) {
-  addContent(tab, [{type:'js',  file:'jquery-1.4.2.min.js'},
-                   {type:'css', file:'pageOverlay.css'},
-                   {type:'js',  file:'pageOverlay.js'}], callback)
-}
-
-function ensureOverlay(tab, callback) {
-  if (!tabStatus.tabId[tab.id]) {
-    addOverlayContent(tab, function() {
-      callback()
-    })
-  } else {
-    callback()
-  }
-}
-
-function addBarOverlay(tab, info) {
-  ensureOverlay(tab, function() {
-    tabStatus.set(tab.id, info.name)
-    tabStatus.updateOverlay(info)
-  })
 }
 
 function setPageActionIcon(tab) {
@@ -274,14 +301,6 @@ function setPageActionIcon(tab) {
     }
     chrome.pageAction.show(tab.id)
     return info
-  }
-}
-
-function onTabLoad(tab) {
-  var info = setPageActionIcon(tab)
-  if (info) {
-    console.log('Recognized page '+tab.url, info)
-    addBarOverlay(tab, info)
   }
 }
 
@@ -301,12 +320,9 @@ function onActionClicked(tab) {
     setPageActionIcon(tab)
     
     if (info) {
-      addBarOverlay(tab, info)
+      tabStatus.showInfo(tab.id, info.name)
     } else {
-      ensureOverlay(tab, function() {
-        tabStatus.set(tab.id)
-        tabStatus.showSubmitOverlay(tab.id)
-      })
+      tabStatus.showSubmit(tab.id)
     }
   })
 }
@@ -321,40 +337,32 @@ function onRequest(request, sender, callback) {
       console.log('Scraped modhash', request)
       redditInfo.storeModhash(request.modhash)
       break
-    case 'query':
-      if (request.hasOwnProperty('url')) {
-        callback(redditInfo.url[request.url])
-      } else if (request.hasOwnProperty('fullname')) {
-        callback(redditInfo.fullname[request.fullname])
-      }
-      break
-    case 'vote':
-      console.log('Voting', request)
-      redditInfo.vote(request.fullname, request.likes, callback)
-      break
-    case 'save':
-    case 'unsave':
-      console.log('Modifying', request)
-      redditInfo[request.action](request.fullname, callback)
-      break
   }
 }
 
-window.setInterval(function() {
-    redditInfo.checkMail()
-}, 300000)
-
 chrome.extension.onRequest.addListener(onRequest)
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  if (changeInfo.status == 'loading') {
-    tabStatus.remove(tabId)
-    onTabLoad(tab)
+chrome.tabs.onSelectionChanged.addListener(tabStatus.updateTab.bind(tabStatus))
+chrome.pageAction.onClicked.addListener(onActionClicked)
+
+chrome.extension.onConnect.addListener(function(port) {
+  tag = port.name.split(':')
+  name = tag[0]
+  data = tag[1]
+  switch (name) {
+    case 'overlay':
+      tabStatus.add(port)
+      var tab = port.sender.tab,
+          info = setPageActionIcon(tab)
+      if (info) {
+        console.log('Recognized page '+tab.url, info)
+        tabStatus.showInfo(tab.id, info.name)
+      }
+      break
+    case 'bar':
+      barStatus.add(port, data)
+      break
   }
 })
-
-chrome.tabs.onSelectionChanged.addListener(tabStatus.updateTab)
-
-chrome.pageAction.onClicked.addListener(onActionClicked)
 
 // Show page action for existing tabs.
 chrome.windows.getAll({populate:true}, function(wins) {
@@ -365,6 +373,9 @@ chrome.windows.getAll({populate:true}, function(wins) {
   })
 })
 
-console.log("Shine loaded.")
+console.log('Shine loaded.')
 redditInfo.init()
+window.setInterval(function() {
+    redditInfo.checkMail()
+}, 5*60*1000)
 redditInfo.checkMail()

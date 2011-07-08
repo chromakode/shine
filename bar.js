@@ -1,4 +1,4 @@
-var info, loggedIn
+var port, fullname, info, loggedIn
 
 function likeDelta(likes) {
   if (likes == true) {
@@ -14,16 +14,16 @@ function vote(likes) {
   info.score += likeDelta(likes) - likeDelta(info.likes)
   info.likes = likes
   update()
-  msgJSON({action:'vote', likes:info.likes})
+  port.postMessage({action:'vote', likes:info.likes})
 }
 
 function toggleSaved() {
   info.saved = !info.saved
   update()
   if (info.saved) {
-    msgJSON({action:'save'})
+    port.postMessage({action:'save'})
   } else {
-    msgJSON({action:'unsave'})
+    port.postMessage({action:'unsave'})
   }
 }
 
@@ -70,22 +70,6 @@ function update() {
   }, 10)
 }
 
-function handleData() {
-  var data = window.location.hash.substr(1)
-  if (data) {
-    data = JSON.parse(decodeURIComponent(data))
-    if (data.hasOwnProperty('loggedIn')) {
-      loggedIn = data.loggedIn
-    }
-    if (data.hasOwnProperty('info')) {
-      info = data.info
-    }
-    if (info) {
-      update()
-    }
-  }
-}
-
 $(document).ready(function() {
   $(window).resize(function() {
     console.log('Resize alert detected updating shine display.')
@@ -116,5 +100,17 @@ $(document).ready(function() {
     msgJSON({action:'close'})
   })
 
-  handleData()
 })
+
+fullname = window.location.hash.substr(1)
+port = chrome.extension.connect({name:'bar:'+fullname})
+port.onMessage.addListener(function(msg) {
+  switch (msg.action) {
+    case 'update':
+      info = msg.info
+      loggedIn = msg.loggedIn
+      update()
+      break
+  }
+})
+port.postMessage({action:'update', useStored:'true'})
