@@ -22,7 +22,7 @@ function scrapeThingInfo(thing) {
 
   info.score = parseInt(thing.find(".score:visible").text())
   
-  info.subreddit = thing.find('a.subreddit').text()
+  info.subreddit = thing.find('a.subreddit').text() || $('.redditname').text()
 
   info.num_comments = parseInt(thing.find('.comments').text()) || 0
 
