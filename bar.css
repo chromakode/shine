@@ -1,4 +1,4 @@
-body { margin:0; font-family:sans-serif; -webkit-user-select:none; width:9999px; }
+body { margin:0; font-family:sans-serif; -webkit-user-select:none; width:100%; }
 
 button, .liked button#like:active, .disliked button#dislike:active, .saved button#save:active { margin:5px 2px; border-radius:5px; background:-webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(200,200,200)), color-stop(1, rgb(250,250,250))); border:2px outset rgba(255,255,255,.4); vertical-align:middle; }
 button:active, .liked button#like, .disliked button#dislike, .saved button#save { background:-webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(210,210,210)), color-stop(1, rgb(195,195,195))); border:2px inset rgba(255,255,255,.4); }
@@ -15,15 +15,15 @@ button#save span { background-image:url(/images/savegray.svg); }
 .saved button#save span { background-image:url(/images/save.svg); }
 button#login span { background-image:url(/images/login.svg); }
 
-#bar { display:table; color:white; text-align:left; font-family:sans-serif; border-top-left-radius:5px; border-bottom-left-radius:5px; }
-#bar > * { display:table-cell; vertical-align:middle; }
-#logo { width:19px; height:19px; padding:0 7px; text-align:center; background:rgba(255,255,255,.075) url(/images/reddit.svg) no-repeat center center; }
+#bar { display:-webkit-box; width:9999px; color:white; text-align:left; font-family:sans-serif; border-top-left-radius:5px; border-bottom-left-radius:5px; }
+#bar > * { display:-webkit-box; -webkit-box-align:center; vertical-align:middle; }
+#logo { width:19px; -webkit-box-align:stretch; padding:0 7px; text-align:center; background:rgba(255,255,255,.075) url(/images/reddit.svg) no-repeat center center; }
 #buttons { white-space:nowrap; }
 #score { padding:0 7px; font-weight:bold; color:#969696; -webkit-user-select:text; }
 #subreddit { opacity:.5; }
 .liked #score { color:#FF8B60; }
 .disliked #score { color:#9494FF; }
-#title { padding:0 10px 0 5px; -webkit-user-select:text; }
+#title { padding:0 10px 0 5px; -webkit-user-select:text; -webkit-box-flex:1; }
 #subreddit { padding:0 10px 0 5px; -webkit-user-select:text; }
 
 .logged-out .if-logged-in { display:none; }

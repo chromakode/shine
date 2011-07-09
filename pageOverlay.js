@@ -16,9 +16,14 @@ ShineOverlay.prototype = {
     document.documentElement.appendChild(this.overlay)
   },
   
-  resize: function(width, height) {
-    this.overlay.style.width = width + 'px'
-    this.overlay.style.height = height + 'px'
+  setHeight: function(height) {
+    if (this.visible) {
+      if (height) {
+        this.overlay.style.height = height
+      }
+      document.documentElement.style.marginTop = height
+      this.overlay.style.opacity = height ? 1 : 0
+    }
   },
 
   visible: false,
@@ -31,12 +36,16 @@ ShineOverlay.prototype = {
 
   hide: function() {
     if (this.visible) {
+      document.documentElement.addEventListener('webkitTransitionEnd', function() {
+        this.overlay.style.display = 'none'
+      }.bind(this), false)
+      this.setHeight(0)
       this.visible = false
-      this.overlay.style.display = 'none'
     }
   },
 
   remove: function() {
+    this.setHeight(0)
     this.overlay.parentNode.removeChild(this.overlay)
   },
   
@@ -60,6 +69,8 @@ var shineBar
 function createBar() {
   if (!shineBar) {
     shineBar = new ShineOverlay('bar')
+    shineBar.show()
+    shineBar.setHeight('2em')
     console.log('Shine bar created.')
   }
   return shineBar
@@ -76,8 +87,13 @@ window.addEventListener('message', function(e) {
   if (e.origin == chrome.extension.getURL('').slice(0, -1)) {
     var request = JSON.parse(e.data)
     console.log('Message received from bar iframe: ', request)
-    if (request.action == 'close') {
-      shineBar.hide()
+    switch (request.action) {
+      case 'height':
+        shineBar.setHeight(request.height + 'px')
+        break
+      case 'close':
+        shineBar.hide()
+        break
     }
   }
 }, false)
