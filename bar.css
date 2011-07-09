@@ -4,14 +4,14 @@ button, .liked button#like:active, .disliked button#dislike:active, .saved butto
 button:active, .liked button#like, .disliked button#dislike, .saved button#save { background:-webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(210,210,210)), color-stop(1, rgb(195,195,195))); border:2px inset rgba(255,255,255,.4); }
 .liked button#like { border:2px solid #FF8B60; }
 .disliked button#dislike { border:2px solid #857DFF; }
-.saved button#save { border:2px solid #F36161; }
+.saved button#save { border:2px solid #E9A10C; }
 button span { background-position:left center; background-repeat:no-repeat; padding-left:18px; vertical-align:middle; }
 button#like span { background-image:url(/images/upgray.svg); }
 .liked button#like span { background-image:url(/images/upmod.svg); }
 button#dislike span { background-image:url(/images/downgray.svg); }
 .disliked button#dislike span { background-image:url(/images/downmod.svg); }
 button#comments span { background-image:url(/images/comments.svg); }
-button#save span { background-image:url(/images/savegray.svg); }
+button#save span { background-image:url(/images/savegray.svg); padding-left:16px; }
 .saved button#save span { background-image:url(/images/save.svg); }
 button#login span { background-image:url(/images/login.svg); }
 
