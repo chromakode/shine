@@ -1,11 +1,11 @@
 body { margin:0; font-family:sans-serif; -webkit-user-select:none; width:100%; }
 
-button, .liked button#like:active, .disliked button#dislike:active, .saved button#save:active { margin:5px 2px; border-radius:5px; background:-webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(200,200,200)), color-stop(1, rgb(250,250,250))); border:2px outset rgba(255,255,255,.4); vertical-align:middle; }
-button:active, .liked button#like, .disliked button#dislike, .saved button#save { background:-webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(210,210,210)), color-stop(1, rgb(195,195,195))); border:2px inset rgba(255,255,255,.4); }
-.liked button#like { border:2px solid #FF8B60; }
-.disliked button#dislike { border:2px solid #857DFF; }
-.saved button#save { border:2px solid #E9A10C; }
-button span { background-position:left center; background-repeat:no-repeat; padding-left:18px; vertical-align:middle; }
+button, .liked button#like:active, .disliked button#dislike:active, .saved button#save:active { margin:5px 2px; padding:2px 6px; border-radius:5px; background:-webkit-linear-gradient(90deg, #ddd, #fff); border:none; box-shadow:0 0 3px rgba(0,0,0,.75); }
+button:active, .liked button#like, .disliked button#dislike, .saved button#save { background:-webkit-linear-gradient(90deg, #eee, #ddd); box-shadow:0 0 5px rgba(0,0,0,1); }
+.liked button#like { box-shadow:0 0 3px 2px #FF8B60; }
+.disliked button#dislike { box-shadow:0 0 3px 2px #857DFF; }
+.saved button#save { box-shadow:0 0 3px 2px #E9A10C; }
+button span { background-position:left center; background-repeat:no-repeat; padding-left:18px; }
 button#like span { background-image:url(/images/upgray.svg); }
 .liked button#like span { background-image:url(/images/upmod.svg); }
 button#dislike span { background-image:url(/images/downgray.svg); }
@@ -15,11 +15,11 @@ button#save span { background-image:url(/images/savegray.svg); padding-left:16px
 .saved button#save span { background-image:url(/images/save.svg); }
 button#login span { background-image:url(/images/login.svg); }
 
-#bar { display:-webkit-box; width:9999px; color:white; text-align:left; font-family:sans-serif; border-top-left-radius:5px; border-bottom-left-radius:5px; }
+#bar { display:-webkit-box; width:9999px; color:#222; text-align:left; font-family:sans-serif; border-top-left-radius:5px; border-bottom-left-radius:5px; }
 #bar > * { display:-webkit-box; -webkit-box-align:center; vertical-align:middle; }
-#logo { width:19px; -webkit-box-align:stretch; padding:0 7px; text-align:center; background:rgba(255,255,255,.075) url(/images/reddit.svg) no-repeat center center; }
+#logo { width:19px; -webkit-box-align:stretch; padding:0 7px; text-align:center; background:rgba(0,0,0,.05) url(/images/reddit.svg) no-repeat center center; }
 #buttons { white-space:nowrap; }
-#score { padding:0 7px; font-weight:bold; color:#969696; -webkit-user-select:text; }
+#score { padding:0 5px; font-weight:bold; color:#969696; -webkit-user-select:text; }
 #subreddit { opacity:.5; }
 .liked #score { color:#FF8B60; }
 .disliked #score { color:#9494FF; }
@@ -33,6 +33,6 @@ button#submit span { background-image:url(/images/submit.svg); background-positi
 input#title-input { width:30em; background:-webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(255,255,255,.7)), color-stop(.5, rgba(255,255,255,.8))); border:2px inset rgba(255,255,255,.4); padding:2px; margin:5px; border-radius:5px; }
 input#title-input::-webkit-input-placeholder { color:#555; }
 
-#close { background:none; padding:0; border:1px solid transparent; border-radius:2px; }
-#close img { vertical-align:middle; padding:3px; }
-#close:hover { border-color:rgba(255,255,255,.4); }
+#close { background:none; padding:0; box-shadow:none; border-radius:2px; opacity:.5; }
+#close img { padding:0 3px; }
+#close:hover { opacity:.75; }

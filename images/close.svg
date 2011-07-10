@@ -11,7 +11,7 @@
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    id="svg2"
    version="1.1"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.1 r9760"
    width="10"
    height="10"
    sodipodi:docname="close.svg">
@@ -38,12 +38,12 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1366"
-     inkscape:window-height="716"
+     inkscape:window-width="1680"
+     inkscape:window-height="1026"
      id="namedview4"
      showgrid="false"
      inkscape:zoom="23.6"
-     inkscape:cx="4.7033898"
+     inkscape:cx="-3.029661"
      inkscape:cy="3.3898305"
      inkscape:window-x="0"
      inkscape:window-y="24"
@@ -53,11 +53,11 @@
      inkscape:guide-bbox="true" />
   <g
      transform="scale(0.99958256,1.0004176)"
-     style="font-size:17.10229874px;font-style:normal;font-weight:normal;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+     style="font-size:17.10229873999999839px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
      id="text2818">
     <path
        d="M 6.1795417,5.0020883 9.9958261,8.8183728 8.8100222,9.995826 5.0020885,6.1795415 1.185804,9.995826 1.2479722e-7,8.8183728 3.8162846,5.0020883 1.2479722e-7,1.1858039 1.185804,0.00835073 5.0020885,3.8162844 8.8183729,0 10.004177,1.1774532 6.1795417,5.0020883"
-       style=""
+       style="fill:#000000;fill-opacity:1"
        id="path3639" />
   </g>
 </svg>
