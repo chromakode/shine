@@ -23,7 +23,7 @@ button#login span { background-image:url(/images/login.svg); }
 #subreddit { opacity:.5; }
 .liked #score { color:#FF8B60; }
 .disliked #score { color:#9494FF; }
-#title { padding:0 10px 0 5px; -webkit-user-select:text; -webkit-box-flex:1; }
+#title { padding:2px 10px 2px 5px; -webkit-user-select:text; -webkit-box-flex:1; }
 #subreddit { padding:0 10px 0 5px; -webkit-user-select:text; }
 
 .logged-out .if-logged-in { display:none; }
