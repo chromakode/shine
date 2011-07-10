@@ -33,6 +33,9 @@ function fitHeight() {
 }
 
 function update() {
+  $('#title').text(info.title)
+  fitHeight()
+
   if (loggedIn) {
     $('#bar').removeClass('logged-out').addClass('logged-in')
   } else {
@@ -52,15 +55,12 @@ function update() {
     $('#bar').removeClass('saved')
   }
   $('#score').text(info.score)
-  $('#title').text(info.title)
   if (info.subreddit) {
     $('#subreddit').text('[' + info.subreddit + ']')
   } else {
     $('#bar').removeClass('subreddit')
   }
   $('#comments span').text(info.num_comments)
-  
-  fitHeight()
 }
 
 $(document).ready(function() {
