@@ -193,8 +193,18 @@ tabStatus = {
     delete this.tabId[tabId]
   },
 
+  send: function(tabId, msg) {
+    var tabData = this.tabId[tabId]
+    if (tabData) {
+      tabData.port.postMessage(msg)
+      return true
+    } else {
+      return false
+    }
+  },
+
   _showInfo: function(tabId, fullname) {
-    this.tabId[tabId].port.postMessage({
+    this.send(tabId, {
       action: 'showInfo',
       fullname: fullname
     })
@@ -213,7 +223,7 @@ tabStatus = {
   },
 
   showSubmit: function(tabId) {
-    this.tabId[tabId].port.postMessage({
+    this.send(tabId, {
       action: 'showSubmit'
     })
   }
