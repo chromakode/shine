@@ -57,7 +57,6 @@ var shineBar
 function createBar() {
   if (!shineBar) {
     shineBar = new ShineOverlay('bar')
-    shineBar.setHeight('2em')
     console.log('Shine bar created.')
   }
   return shineBar
