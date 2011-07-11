@@ -210,7 +210,9 @@ tabStatus = {
   },
 
   showSubmit: function(tabId) {
-    chrome.tabs.sendRequest(tabId, {action:'showSubmit'})
+    this.tabId[tabId].port.postMessage({
+      action: 'showSubmit'
+    })
   }
 }
 

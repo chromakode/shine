@@ -13,22 +13,16 @@ function submit(e) {
   }, 500)
 }
 
-function update() {
+function randomMsg() {
   $('#title-input').attr('placeholder', function(i, val) {
-    var adjs = ['a clever', 'a snarky', 'a nifty', 'an exciting', 'an alluring', 'a juicy', 'an engaging', 'a concise']
-    var ends = ['Be witty!', 'Be silly!', 'Be nice!', 'Huzzah!', 'Have fun!', 'Good luck!']
+    var adjs = ['a clever', 'a snarky', 'a nifty', 'an exciting', 'an alluring', 'a juicy', 'an engaging', 'a concise'],
+        ends = ['Be witty!', 'Be silly!', 'Be nice!', 'Huzzah!', 'Have fun!', 'Good luck!']
     return 'Enter '+randomChoice(adjs)+' title to share this page with reddit. '+randomChoice(ends)
   })
-  
-  window.setTimeout(function() {
-    msgJSON({action:'size', width:$('#bar').outerWidth(), height:$('#bar').outerHeight()})
-  }, 10)
 }
 
 $(document).ready(function() {
-  $(window).resize(function() {
-    update()
-  })
+  $(window).resize(fitHeight)
 
   $('#submit').click(submit)
   $('#title-input').keypress(function(e) {
@@ -41,5 +35,6 @@ $(document).ready(function() {
     msgJSON({action:'close'})
   })
 
-  update()
-}
+  randomMsg()
+  fitHeight()
+})

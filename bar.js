@@ -27,11 +27,6 @@ function toggleSaved() {
   }
 }
 
-function fitHeight() {
-  msgJSON({action:'height', height:$('#bar').height()})
-  $('#bar').width('100%')
-}
-
 function update() {
   $('#title').text(info.title)
   fitHeight()
