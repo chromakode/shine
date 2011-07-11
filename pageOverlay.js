@@ -1,5 +1,12 @@
 var port, shineBar
 
+function once(el, ev, handler, capture) {
+  el.addEventListener(ev, function() {
+    handler.apply(this, arguments)
+    el.removeEventListener(ev, arguments.callee, capture)
+  }, capture)
+}
+
 function ShineOverlay(id) {
   this.id = id
   this._id = '_shine-overlay-'+this.id
@@ -16,36 +23,18 @@ ShineOverlay.prototype = {
   },
   
   setHeight: function(height) {
-    if (this.visible) {
-      if (height) {
-        this.overlay.style.height = height
-      }
-      document.documentElement.style.marginTop = height
-      this.overlay.style.opacity = height ? 1 : 0
+    if (height) {
+      this.overlay.style.height = height
     }
-  },
-
-  visible: false,
-  show: function() {
-    if (!this.visible) {
-      this.visible = true
-      this.overlay.style.display = 'block'
-    }
-  },
-
-  hide: function() {
-    if (this.visible) {
-      document.documentElement.addEventListener('webkitTransitionEnd', function() {
-        this.overlay.style.display = 'none'
-      }.bind(this), false)
-      this.setHeight(0)
-      this.visible = false
-    }
+    document.documentElement.style.marginTop = height
+    this.overlay.style.opacity = height ? 1 : 0
   },
 
   remove: function() {
+    once(document.documentElement, 'webkitTransitionEnd', function() {
+      this.overlay.parentNode.removeChild(this.overlay)
+    }.bind(this))
     this.setHeight(0)
-    this.overlay.parentNode.removeChild(this.overlay)
   },
   
   _display: function(url) {
@@ -53,10 +42,10 @@ ShineOverlay.prototype = {
   },
 
   display: function(fullname) {
-      if (!this.fullname || this.fullname == fullname) {
-        this.fullname = fullname
-        this._display('bar.html#'+encodeURIComponent(fullname))
-      }
+    if (!this.fullname || this.fullname == fullname) {
+      this.fullname = fullname
+      this._display('bar.html#'+encodeURIComponent(fullname))
+    }
   },
 
   showSubmit: function() {
@@ -68,7 +57,6 @@ var shineBar
 function createBar() {
   if (!shineBar) {
     shineBar = new ShineOverlay('bar')
-    shineBar.show()
     shineBar.setHeight('2em')
     console.log('Shine bar created.')
   }
@@ -78,6 +66,7 @@ function createBar() {
 function removeBar() {
   if (shineBar) {
     shineBar.remove()
+    shineBar = false
     console.log('Shine bar removed.')
   }
 }
@@ -91,7 +80,7 @@ window.addEventListener('message', function(e) {
         shineBar.setHeight(request.height + 'px')
         break
       case 'close':
-        shineBar.hide()
+        removeBar()
         break
     }
   }
