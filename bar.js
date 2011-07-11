@@ -99,6 +99,7 @@ port = chrome.extension.connect({name:'bar:'+fullname})
 port.onMessage.addListener(function(msg) {
   switch (msg.action) {
     case 'update':
+      console.log('Received updated info', msg)
       info = msg.info
       loggedIn = msg.loggedIn
       update()
