@@ -19,11 +19,11 @@ button#login span { background-image:url(/images/login.svg); }
 #bar > * { display:-webkit-box; -webkit-box-align:center; vertical-align:middle; }
 #logo { width:19px; -webkit-box-align:stretch; padding:0 7px; text-align:center; background:rgba(0,0,0,.05) url(/images/reddit.svg) no-repeat center center; }
 #buttons { white-space:nowrap; }
-#score { padding:0 5px; font-weight:bold; color:#969696; -webkit-user-select:text; }
+#score { padding:0 10px; font-weight:bold; color:#969696; -webkit-user-select:text; }
 #subreddit { opacity:.5; }
 .liked #score { color:#FF8B60; }
 .disliked #score { color:#9494FF; }
-#title { padding:2px 10px 2px 5px; -webkit-user-select:text; -webkit-box-flex:1; }
+#title { padding:2px 10px 2px 0; -webkit-user-select:text; -webkit-box-flex:1; }
 #subreddit { padding:0 10px 0 5px; -webkit-user-select:text; }
 
 .logged-out .if-logged-in { display:none; }
@@ -33,6 +33,5 @@ button#submit span { background-image:url(/images/submit.svg); background-positi
 input#title-input { width:30em; background:-webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(255,255,255,.7)), color-stop(.5, rgba(255,255,255,.8))); border:2px inset rgba(255,255,255,.4); padding:2px; margin:5px; border-radius:5px; }
 input#title-input::-webkit-input-placeholder { color:#555; }
 
-#close { background:none; padding:0; box-shadow:none; border-radius:2px; opacity:.5; }
-#close img { padding:0 3px; }
+#close { background:none; padding:0; margin-right:6px; box-shadow:none; border-radius:2px; opacity:.5; }
 #close:hover { opacity:.75; }
