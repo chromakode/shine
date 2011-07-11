@@ -19,6 +19,7 @@
   "content_scripts": [
     {
       "matches": ["http://*.reddit.com/*"],
+      "run_at": "document_end",
       "js": ["jquery.js", "redditContent.js"]
     },
     {
