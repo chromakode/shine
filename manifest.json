@@ -1,7 +1,7 @@
 {
   "name": "Shine",
   "version": "0.0.4",
-  "description": "Shine displays a bar over pages from reddit to help you submit, vote on, save, and view comments for web pages.",
+  "description": "Shine displays a bar over pages from reddit to help you submit, vote on, save, and view comments.",
   "permissions": [
     "tabs",
     "notifications",
