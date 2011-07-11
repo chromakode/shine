@@ -17,7 +17,7 @@ button#login span { background-image:url(/images/login.svg); }
 
 #bar { display:-webkit-box; width:9999px; color:#222; text-align:left; font-family:sans-serif; border-top-left-radius:5px; border-bottom-left-radius:5px; }
 #bar > * { display:-webkit-box; -webkit-box-align:center; vertical-align:middle; }
-#logo { width:19px; -webkit-box-align:stretch; padding:0 7px; text-align:center; background:rgba(0,0,0,.05) url(/images/reddit.svg) no-repeat center center; }
+#logo { width:19px; -webkit-box-align:stretch; padding:0 7px; text-align:center; background:url(/images/reddit.svg) no-repeat center center, -webkit-linear-gradient(90deg, rgba(0,0,0,.1), rgba(0,0,0,.05)); }
 #buttons { white-space:nowrap; }
 #score { padding:0 10px; font-weight:bold; color:#969696; }
 .liked #score { color:#FF8B60; }
