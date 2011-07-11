@@ -12,7 +12,6 @@ ShineOverlay.prototype = {
     this.frame.setAttribute('frameborder', 'no')
     this.overlay = document.createElement('shinebar')
     this.overlay.appendChild(this.frame)
-    // FIXME: body may not exist yet
     document.documentElement.appendChild(this.overlay)
   },
   
