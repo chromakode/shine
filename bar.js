@@ -56,7 +56,7 @@ function update() {
     var subPath = '/r/'+info.subreddit
     $('#subreddit')
       .text(subPath)
-      .attr('href', 'http://www.reddit.com/'+subPath)
+      .attr('href', 'http://www.reddit.com'+subPath)
   } else {
     $('#bar').removeClass('subreddit')
   }
