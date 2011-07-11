@@ -327,7 +327,10 @@ function onActionClicked(tab) {
   })
 }
 
-function onRequest(request, sender, callback) {
+chrome.tabs.onSelectionChanged.addListener(tabStatus.updateTab.bind(tabStatus))
+chrome.pageAction.onClicked.addListener(onActionClicked)
+
+chrome.extension.onRequest.addListener(function(request, sender, callback) {
   switch (request.action) {
     case 'thingClick':
       console.log('Thing clicked', request)
@@ -338,11 +341,7 @@ function onRequest(request, sender, callback) {
       redditInfo.storeModhash(request.modhash)
       break
   }
-}
-
-chrome.extension.onRequest.addListener(onRequest)
-chrome.tabs.onSelectionChanged.addListener(tabStatus.updateTab.bind(tabStatus))
-chrome.pageAction.onClicked.addListener(onActionClicked)
+})
 
 chrome.extension.onConnect.addListener(function(port) {
   tag = port.name.split(':')
