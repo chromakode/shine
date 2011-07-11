@@ -56,7 +56,10 @@ function update() {
   }
   $('#score').text(info.score)
   if (info.subreddit) {
-    $('#subreddit').text('[' + info.subreddit + ']')
+    var subPath = '/r/'+info.subreddit
+    $('#subreddit')
+      .text(subPath)
+      .attr('href', 'http://www.reddit.com/'+subPath)
   } else {
     $('#bar').removeClass('subreddit')
   }
