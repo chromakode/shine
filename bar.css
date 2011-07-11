@@ -2,9 +2,9 @@ body { margin:0; font-family:sans-serif; -webkit-user-select:none; width:100%; }
 
 button, .liked button#like:active, .disliked button#dislike:active, .saved button#save:active { margin:5px 2px; padding:2px 6px; border-radius:5px; background:-webkit-linear-gradient(90deg, #ddd, #fff); border:none; box-shadow:0 0 3px rgba(0,0,0,.75); }
 button:active, .liked button#like, .disliked button#dislike, .saved button#save { background:-webkit-linear-gradient(90deg, #eee, #ddd); box-shadow:0 0 5px rgba(0,0,0,1); }
-.liked button#like { box-shadow:0 0 3px 1px #FF8B60; }
-.disliked button#dislike { box-shadow:0 0 3px 1px #857DFF; }
-.saved button#save { box-shadow:0 0 3px 1px #E9A10C; }
+.liked button#like { box-shadow:0 0 3px rgba(0,0,0,.75), 0 0 4px 1px #FF8B60; }
+.disliked button#dislike { box-shadow:0 0 3px rgba(0,0,0,.75), 0 0 4px 1px #857DFF; }
+.saved button#save { box-shadow:0 0 3px rgba(0,0,0,.75), 0 0 4px 1px #E9A10C; }
 button span { background-position:left center; background-repeat:no-repeat; padding-left:18px; }
 button#like span { background-image:url(/images/upgray.svg); }
 .liked button#like span { background-image:url(/images/upmod.svg); }
