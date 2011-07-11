@@ -44,7 +44,10 @@ redditInfo = {
               'images/reddit_mail_icon.svg',
               notifyTitle,
               notifyText)
-            n.onclick = function() { window.open('http://www.reddit.com/message/unread/') }
+            n.onclick = function() {
+              window.open('http://www.reddit.com/message/unread/')
+              n.cancel()
+            }
             n.show()
           }
 
