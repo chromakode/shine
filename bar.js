@@ -28,7 +28,9 @@ function toggleSaved() {
 }
 
 function update() {
-  $('#title').text(info.title)
+  $('#title')
+    .text(info.title)
+    .attr('href', 'http://reddit.com'+info.permalink)
   fitHeight()
 
   if (loggedIn) {
