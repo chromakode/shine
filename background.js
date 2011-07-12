@@ -8,55 +8,29 @@ redditInfo = {
     this.fullname[info.name] = info
   },
 
-  checkMail: function(params, callback) {
-    if (!redditInfo.isLoggedIn()) { return }
-    console.log('Checking reddit mail..')
+  update: function(callback) {
     $.ajax({
-      url: 'http://www.reddit.com/message/unread/.json',
+      url: 'http://www.reddit.com/api/me.json',
       success: function(resp) {
         if (resp.data) {
-          var newMsgCount = 0
-          var newIdx = null
+          console.log('Updated reddit info', resp.data)
+          this.storeModhash(resp.data.modhash)
+          callback(resp.data)
+        }
+      }.bind(this),
+      error: function() { callback(false) }
+    })
+  },
 
-          for (i = 0; i < resp.data.children.length; i++) {
-            var messageTime = resp.data.children[i].data.created_utc*1000
-            if (!!redditInfo.lastMailCheckTime || messageTime > redditInfo.lastMailCheckTime) {
-              newMsgCount++
-              if (!newIdx) { newIdx = i }
-            }
-          }
-          
-
-          var notifyTitle, notifyText
-          if (newMsgCount == 1) {
-            notifyTitle = resp.data.children[newIdx].data.author + ': ' +
-              resp.data.children[newIdx].data.subject
-            notifyText = resp.data.children[newIdx].data.body
-          } else if (newMsgCount > 1) {
-            notifyTitle = 'reddit: new messages!'
-            notifyText = 'You have ' + resp.data.children.length + ' new messages.'
-          }
-          
-          console.log('New messages: ', newMsgCount)
-
-          if (newMsgCount > 0) {
-            var n = webkitNotifications.createNotification(
-              'images/reddit_mail_icon.svg',
-              notifyTitle,
-              notifyText)
-            n.onclick = function() {
-              window.open('http://www.reddit.com/message/unread/')
-              n.cancel()
-            }
-            n.show()
-          }
-
-          redditInfo.lastMailCheckTime = new Date()
+  fetchMail: function(callback) {
+    $.ajax({
+      url: 'http://www.reddit.com/message/unread.json',
+      success: function(resp) {
+        if (resp.data) {
+          callback(resp.data.children)
         }
       },
-      error: function() {
-          console.log('Reddit mail check failed!')
-      }
+      error: function() { callback(false) }
     })
   },
 
@@ -112,14 +86,8 @@ redditInfo = {
   },
 
   _thingAction: function(action, data, callback) {
-    if (!this.isLoggedIn()) {
-      this.lookupName(data.id, function() {
-        // Retry after we've stashed a modhash.
-        redditInfo._thingAction(action, data, callback)
-      })
-      return
-    }
-
+    if (!this.isLoggedIn()) { callback(false, 'not logged in') }
+    
     data.uh = this.modhash
     $.ajax({
       type: 'POST',
@@ -306,6 +274,63 @@ barStatus = {
   }
 }
 
+mailNotifier = {
+  newCount: 0,
+  lastSeen: null,
+  notify: function(messages) {
+    var newIdx = null,
+        lastSeen = this.lastSeen
+    for (i = 0; i < messages.length; i++) {
+      var messageTime = messages[i].data.created_utc*1000
+      if (!lastSeen || messageTime > lastSeen) {
+        this.newCount++
+        if (!newIdx) { newIdx = i }
+        this.lastSeen = Math.max(this.lastSeen, messageTime)
+      }
+    }
+
+    console.log('New messages: ', this.newCount)
+
+    var title, text
+    if (this.newCount == 1) {
+      var message = messages[newIdx]
+      title = message.data.author + ': ' + message.data.subject
+      text = message.data.body
+    } else if (this.newCount > 1) {
+      title = 'reddit: new messages!'
+      text = 'You have ' + messages.length + ' new messages.'
+    }
+
+    if (this.newCount > 0) {
+      this.showNotification(title, text)
+    }
+  },
+
+  clear: function() {
+    this.newCount = 0
+    if (this.notification) {
+      this.notification.cancel()
+    }
+  },
+
+  notification: null,
+  showNotification: function(title, text) {
+    if (this.notification) {
+      this.notification.cancel()
+    }
+
+    var n = this.notification =
+      webkitNotifications.createNotification('images/reddit_mail_icon.svg', title, text)
+
+    this.notification.onclick = function() {
+      window.open('http://www.reddit.com/message/unread/')
+      n.cancel()
+    }
+
+    this.notification.show()
+  }
+}
+
 function setPageActionIcon(tab) {
   if (/^http:\/\/.*/.test(tab.url)) {
     var info = redditInfo.url[tab.url]
@@ -387,9 +412,17 @@ chrome.windows.getAll({populate:true}, function(wins) {
   })
 })
 
+function checkMail() {
+  redditInfo.update(function(info) {
+    if (info.has_mail) {
+      redditInfo.fetchMail(mailNotifier.notify.bind(mailNotifier))
+    } else {
+      mailNotifier.clear()
+    }
+  })
+}
+
 console.log('Shine loaded.')
 redditInfo.init()
-window.setInterval(function() {
-    redditInfo.checkMail()
-}, 5*60*1000)
-redditInfo.checkMail()
+window.setInterval(checkMail, 5*60*1000)
+checkMail()
