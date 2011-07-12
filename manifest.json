@@ -1,7 +1,7 @@
 {
-  "name": "Shine",
-  "version": "0.0.4",
-  "description": "Shine displays a bar over pages from reddit to help you submit, vote on, save, and view comments.",
+  "name": "reddit companion",
+  "version": "0.9.0",
+  "description": "Integrate reddit with Chrome. Easily submit, vote, save, and view comments. Receive new message notifications.",
   "permissions": [
     "tabs",
     "notifications",
