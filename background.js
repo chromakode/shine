@@ -279,29 +279,31 @@ mailNotifier = {
   lastSeen: null,
   notify: function(messages) {
     var newIdx = null,
-        lastSeen = this.lastSeen
+        lastSeen = this.lastSeen,
+        newCount = 0
     for (i = 0; i < messages.length; i++) {
       var messageTime = messages[i].data.created_utc*1000
       if (!lastSeen || messageTime > lastSeen) {
-        this.newCount++
+        newCount++
         if (!newIdx) { newIdx = i }
         this.lastSeen = Math.max(this.lastSeen, messageTime)
       }
     }
+    this.newCount += newCount
 
-    console.log('New messages: ', this.newCount)
+    console.log('New messages: ', newCount, this.newCount)
 
     var title, text
-    if (this.newCount == 1) {
+    if (newCount == 1) {
       var message = messages[newIdx]
       title = message.data.author + ': ' + message.data.subject
       text = message.data.body
-    } else if (this.newCount > 1) {
+    } else if (newCount > 1) {
       title = 'reddit: new messages!'
-      text = 'You have ' + messages.length + ' new messages.'
+      text = 'You have ' + this.newCount + ' new messages.'
     }
 
-    if (this.newCount > 0) {
+    if (newCount > 0) {
       this.showNotification(title, text)
     }
   },
