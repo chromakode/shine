@@ -378,10 +378,6 @@ chrome.extension.onRequest.addListener(function(request, sender, callback) {
       console.log('Thing clicked', request)
       redditInfo.setURL(request.url, request.info)
       break
-    case 'modhashUpdate':
-      console.log('Scraped modhash', request)
-      redditInfo.storeModhash(request.modhash)
-      break
   }
 })
 
