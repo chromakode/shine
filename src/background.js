@@ -8,8 +8,14 @@ redditInfo = {
     this.fullname[info.name] = info
   },
 
+  request: function(options) {
+    if (!options.data) { options.data = {} }
+    options.data['app'] = 'shine'
+    $.ajax(options)
+  },
+
   update: function(callback) {
-    $.ajax({
+    this.request({
       url: 'http://www.reddit.com/api/me.json',
       success: function(resp) {
         if (resp.data) {
@@ -23,7 +29,7 @@ redditInfo = {
   },
 
   fetchMail: function(callback) {
-    $.ajax({
+    this.request({
       url: 'http://www.reddit.com/message/unread.json',
       success: function(resp) {
         if (resp.data) {
@@ -37,7 +43,7 @@ redditInfo = {
   _queryInfo: function(params, callback) {
     console.log('Performing AJAX info call for ', params)
     params.limit = 1
-    $.ajax({
+    this.request({
       url: 'http://www.reddit.com/api/info.json',
       data: params,
       success: function(resp) {
@@ -89,7 +95,7 @@ redditInfo = {
     if (!this.isLoggedIn()) { callback(false, 'not logged in') }
     
     data.uh = this.modhash
-    $.ajax({
+    this.request({
       type: 'POST',
       url: 'http://www.reddit.com/api/'+action,
       data: data,
