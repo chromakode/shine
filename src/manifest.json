@@ -20,12 +20,12 @@
     {
       "matches": ["http://*.reddit.com/*"],
       "run_at": "document_start",
-      "js": ["redditContent.js"]
+      "js": ["debug.js", "redditContent.js"]
     },
     {
       "matches": ["http://*/*"],
       "run_at": "document_start",
-      "js": ["pageOverlay.js"],
+      "js": ["debug.js", "pageOverlay.js"],
       "css": ["pageOverlay.css"]
     }
   ]

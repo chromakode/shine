@@ -1,9 +1,3 @@
-DEBUG = true
-if (!DEBUG) {
-  // sshhh
-  console.log = function(){}
-}
-
 function clickOpenURL(event, url) {
   if (event.button == 1) {
     window.open(url)
