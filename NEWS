@@ -1,3 +1,6 @@
+== Version 1.0.2 ==
+* Add some CSS hacks to fix the display of bar buttons in OSX.
+
 == Version 1.0.1 ==
 * Change the "like"/"dislike" wording to "upvote"/"downvote". Thanks to
   everyone who responded to this.
