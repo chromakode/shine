@@ -70,11 +70,11 @@ $(document).ready(function() {
     clickOpenURL(e, 'http://reddit.com'+info.permalink)
   })
   
-  $('#like').click(function() {
+  $('#upvote').click(function() {
     vote(info.likes == true ? null : true)
   })
 
-  $('#dislike').click(function() {
+  $('#downvote').click(function() {
     vote(info.likes == false ? null : false)
   })
 
