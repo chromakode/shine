@@ -1,7 +1,7 @@
 {
   "name": "reddit companion",
   "version": "0.9.0",
-  "description": "Integrate reddit with Chrome. Easily submit, vote, save, and view comments. Receive new message notifications.",
+  "description": "Turn your browser into a redditor's best friend.",
   "permissions": [
     "tabs",
     "notifications",
