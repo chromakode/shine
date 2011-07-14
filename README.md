@@ -1,6 +1,8 @@
 # reddit companion
 
-reddit companion is a Chrome extension that integrates reddit into the browser. 
+reddit companion is a Chrome extension that integrates reddit into the browser.
+
+![logo](https://github.com/chromakode/shine/raw/master/src/images/shine-48.png)
 
 ## features
 
