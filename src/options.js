@@ -1,7 +1,9 @@
 $(document).ready(function() {
-  if (localStorage['showTooltips'] == 'true') { $('#showTooltips').prop('checked', true) }
-  if (localStorage['ignoreSelfPosts'] == 'true') { $('#ignoreSelfPosts').prop('checked', true) }
-  $('input[type=checkbox]').click(function() {
-    localStorage[$(this).attr('id')] = $(this).is(':checked')
-  })
+  $('input[type=checkbox]')
+    .each(function(i, el) {
+      if (localStorage[el.id] == 'true') { $(this).prop('checked', true) }
+    })
+    .click(function() {
+      localStorage[this.id] = $(this).is(':checked')
+    })
 })

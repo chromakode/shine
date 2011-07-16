@@ -1,3 +1,16 @@
+function initOptions() {
+  defaultOptions = {
+    'showTooltips': true,
+    'ignoreSelfPosts': false
+  }
+
+  for (key in defaultOptions) {
+    if (localStorage[key] == undefined) {
+      localStorage[key] = defaultOptions[key]
+    }
+  }
+}
+
 redditInfo = {
   getURL: function(url) {
     return this.url[url]
@@ -430,6 +443,7 @@ function checkMail() {
   })
 }
 
+initOptions()
 console.log('Shine loaded.')
 redditInfo.init()
 window.setInterval(checkMail, 5*60*1000)
