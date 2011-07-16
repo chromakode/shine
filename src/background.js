@@ -354,7 +354,7 @@ mailNotifier = {
 
 function setPageActionIcon(tab) {
   if (/^http:\/\/.*/.test(tab.url)) {
-    var info = redditInfo.url[tab.url]
+    var info = redditInfo.getURL(tab.url)
     if (info) {
       chrome.pageAction.setIcon({tabId:tab.id, path:'/images/reddit.png'})
     } else { 
