@@ -382,11 +382,7 @@ chrome.extension.onRequest.addListener(function(request, sender, callback) {
   switch (request.action) {
     case 'thingClick':
       console.log('Thing clicked', request)
-      if (request.info.domain == ('self.' + request.info.subreddit)) {
-        console.log('Ignoring self post', request.info)
-      } else {
-        redditInfo.setURL(request.url, request.info)
-      }
+      redditInfo.setURL(request.url, request.info)
       break
   }
 })
@@ -401,8 +397,12 @@ chrome.extension.onConnect.addListener(function(port) {
       var tab = port.sender.tab,
           info = setPageActionIcon(tab)
       if (info) {
-        console.log('Recognized page '+tab.url, info)
-        tabStatus.showInfo(tab.id, info.name)
+        if (localStorage['ignoreSelfPosts'] == 'true' && info.is_self) {
+          console.log('Ignoring self post', info)
+        } else {
+          console.log('Recognized page '+tab.url, info)
+          tabStatus.showInfo(tab.id, info.name)
+        }
       }
       break
     case 'bar':

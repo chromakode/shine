@@ -33,6 +33,7 @@ function scrapeThingInfo(thing) {
   info.permalink = thing.querySelector('.comments').href.match(/.*reddit.com(\/.+)/)[1]
   
   info.domain = thing.querySelector('.domain > a').innerText
+  info.is_self = info.domain == ('self.' + info.subreddit)
   
   console.log('Scraped info from page:', info)
   return info
