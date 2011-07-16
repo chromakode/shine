@@ -46,11 +46,16 @@ function update() {
   } else {
     $('#bar').removeClass('liked disliked')
   }
+
   if (info.saved == true) {
     $('#bar').addClass('saved')
   } else {
     $('#bar').removeClass('saved')
   }
+  if (localStorage['showTooltips'] != 'false') {
+    $('#save').attr('title', info.saved ? 'Unsave' : 'Save')
+  }
+
   $('#score').text(info.score)
   if (info.subreddit) {
     var subPath = '/r/'+info.subreddit
@@ -89,6 +94,10 @@ $(document).ready(function() {
   $('#close').click(function() {
     msgJSON({action:'close'})
   })
+  
+  if (localStorage['showTooltips'] == 'false') {
+    $('#bar *[title]').removeAttr('title')
+  }
 })
 
 fullname = window.location.hash.substr(1)
