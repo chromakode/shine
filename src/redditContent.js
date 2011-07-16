@@ -31,7 +31,9 @@ function scrapeThingInfo(thing) {
   info.num_comments = parseInt(thing.querySelector('.comments').innerText) || 0
 
   info.permalink = thing.querySelector('.comments').href.match(/.*reddit.com(\/.+)/)[1]
-
+  
+  info.domain = thing.querySelector('.domain > a').innerText
+  
   console.log('Scraped info from page:', info)
   return info
 }
