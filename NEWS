@@ -1,6 +1,7 @@
 == Version 1.0.3 ==
 * Add options page.
 * Add button tooltips which can be toggled on/off.
+* Add option to not auto-display the bar on self posts
 
 == Version 1.0.2 ==
 * Add some CSS hacks to fix the display of bar buttons in OSX.
