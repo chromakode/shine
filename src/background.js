@@ -61,15 +61,15 @@ redditInfo = {
       data: params,
       success: function(resp) {
         if (resp.data) {
-          redditInfo.modhash = resp.data.modhash
+          this.storeModhash(resp.data.modhash)
           if (resp.data.children.length) {
             var info = resp.data.children[0].data
-            redditInfo.setURL(info.url, info)
+            this.setURL(info.url, info)
             barStatus.updateInfo(info)
           }
           if (callback) { callback(info) }
         }
-      },
+      }.bind(this),
       error: function() {
         if (callback) { callback(null) }
       }
