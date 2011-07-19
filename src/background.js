@@ -1,6 +1,7 @@
 function initOptions() {
   defaultOptions = {
-    'ignoreSelfPosts': false,
+    'autoShow': true,
+    'autoShowSelf': true,
     'showTooltips': true,
     'checkMail': true,
   }
@@ -493,7 +494,9 @@ chrome.extension.onConnect.addListener(function(port) {
       var tab = port.sender.tab,
           info = setPageActionIcon(tab)
       if (info) {
-        if (localStorage['ignoreSelfPosts'] == 'true' && info.is_self) {
+        if (localStorage['autoShow'] == 'false') {
+          console.log('Auto-show disabled. Ignoring reddit page', info)
+        } else if (localStorage['autoShowSelf'] == 'false' && info.is_self) {
           console.log('Ignoring self post', info)
         } else if (barStatus.hidden[info.name]) {
           console.log('Bar was closed on this page. Ignoring.', info)
