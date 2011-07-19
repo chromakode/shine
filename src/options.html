@@ -4,15 +4,20 @@
     <script type="text/javascript" src="jquery.js"></script>
     <script type="text/javascript" src="options.js"></script>
     <link href="options.css" type="text/css" rel="stylesheet" />
+    <link href="pageOverlay.css" type="text/css" rel="stylesheet" />
     <title>reddit companion options</title>
   </head>
   <body>
   <div id="container">
     <h1><img src="/images/shine.svg" alt="logo"/>reddit companion options</h1>
-    <ul id="options">
+    <hr>
+    <shinebar><iframe src="bar.html#_shine_demo"></iframe></shinebar>
+    <ul class="options">
       <li><input type="checkbox" id="showTooltips"> <label for="showTooltips">show tooltips on buttons</label></li>
       <li><input type="checkbox" id="ignoreSelfPosts"> <label for="ignoreSelfPosts">do not auto-display the bar on self posts</label></li>
     </ul>
+    <hr/>
+    <p>Want to help decide on new features? Join <a href="http://www.reddit.com/r/companion/">/r/companion</a>.</p>
   </div>
   </body>
 </html>

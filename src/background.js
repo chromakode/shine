@@ -15,7 +15,15 @@ redditInfo = {
   freshAgeThreshold: 5*60,
 
   url: {},
-  fullname: {},
+  fullname: {
+    _shine_demo: {
+      title: 'companion bar',
+      score: '\u221e',
+      num_comments: '7',
+      likes: true,
+      _fake: true
+    }
+  },
   fetching: {},
 
   getURL: function(url) {
