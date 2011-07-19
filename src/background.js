@@ -117,6 +117,11 @@ redditInfo = {
         callback(stored)
       }
 
+      if (stored._fake) {
+        console.log('Skipping fake info request.')
+        return false
+      }
+
       if (this.fetching[stored.name]) {
         console.log('Info already being fetched. Skipping update.', stored)
         return false
