@@ -81,8 +81,10 @@ redditInfo = {
             barStatus.updateInfo(info)
             callback(info)
           } else {
-            callback(false, resp)
+            callback(null)
           }
+        } else {
+          callback(false, resp)
         }
       }.bind(this),
       error: function() { callback(false) }
@@ -95,9 +97,9 @@ redditInfo = {
     // Look up `key` from `array` and call `callback` with the stored data immediately if
     // `useStored` is true and stored info is available. If stored data is
     // currently in the process of being refreshed or it is older than
-    // redditInfo.freshAgeThreshold seconds old, `callback` is invoked with
-    // null. Otherwise, the data is fetched from reddit and `callback` is
-    // invoked with the result.
+    // redditInfo.freshAgeThreshold seconds old, false is returned. Otherwise,
+    // the data is fetched from reddit and `callback` is invoked with the
+    // result.
     var stored = array[key],
         storedAge = 0,
         now = Date.now()
@@ -109,14 +111,12 @@ redditInfo = {
 
       if (this.fetching[stored.name]) {
         console.log('Info already being fetched. Skipping update.', stored)
-        callback(null)
         return false
       }
     
       storedAge = Math.floor((now - stored._ts) / 1000)
       if (storedAge < redditInfo.freshAgeThreshold) {
         console.log('Info is', storedAge, 'seconds old. Skipping update.', stored)
-        callback(null)
         return false
       }
 
@@ -283,7 +283,6 @@ barStatus = {
 
   update: function(barData, stored) {
     redditInfo.lookupName(barData.fullname, stored, function(info) {
-      if (!info) { return }
       console.log('Updating bar', barData)
       barData.port.postMessage({
         action: 'update',
