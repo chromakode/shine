@@ -389,7 +389,7 @@ mailNotifier = {
     }
 
     var n = this.notification =
-      webkitNotifications.createNotification('images/reddit_mail_icon.svg', title, text)
+      webkitNotifications.createNotification('images/reddit-mail.svg', title, text)
 
     this.notification.onclick = function() {
       window.open('http://www.reddit.com/message/unread/')
