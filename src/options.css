@@ -16,3 +16,8 @@ section > shinebar, section > .notification-demo { border-radius:5px; box-shadow
 .options li { list-style-type:none; }
 .options label { display: inline-block; font-weight:bold; cursor:pointer; }
 .options input[type="checkbox"] { cursor:pointer; }
+shinebar, .notification-demo, section li { -webkit-transition-property:opacity; -webkit-transition-duration:.15s; }
+#contents shinebar, #contents section.bar li { opacity:.5; }
+#contents.autoShow shinebar, #contents.autoShow section.bar li, #contents section.bar li:first-child { opacity:1; }
+#contents .notification-demo { opacity:.5; }
+#contents.checkMail .notification-demo { opacity:1; }

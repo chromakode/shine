@@ -10,9 +10,14 @@ $(document).ready(function() {
 
   $('input[type=checkbox]')
     .each(function(i, el) {
-      if (localStorage[el.id] == 'true') { $(this).prop('checked', true) }
+      if (localStorage[el.id] == 'true') {
+        $(this).prop('checked', true)
+        $('#contents').addClass(el.id)
+      }
     })
     .click(function() {
-      localStorage[this.id] = $(this).is(':checked')
+      var value= $(this).is(':checked')
+      localStorage[this.id] = value
+      $('#contents').toggleClass(this.id, value)
     })
 })
