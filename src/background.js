@@ -283,6 +283,7 @@ barStatus = {
 
   update: function(barData, stored) {
     redditInfo.lookupName(barData.fullname, stored, function(info) {
+      if (info == null) { return }
       console.log('Updating bar', barData)
       barData.port.postMessage({
         action: 'update',
