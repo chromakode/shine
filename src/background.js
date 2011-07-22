@@ -349,7 +349,6 @@ barStatus = {
 }
 
 mailNotifier = {
-  newCount: 0,
   lastSeen: null,
   notify: function(messages) {
     var newIdx = null,
@@ -363,9 +362,8 @@ mailNotifier = {
         this.lastSeen = Math.max(this.lastSeen, messageTime)
       }
     }
-    this.newCount += newCount
 
-    console.log('New messages: ', newCount, this.newCount)
+    console.log('New messages: ', newCount)
 
     var title, text
     if (newCount == 1) {
@@ -374,7 +372,7 @@ mailNotifier = {
       text = message.data.body
     } else if (newCount > 1) {
       title = 'reddit: new messages!'
-      text = 'You have ' + this.newCount + ' new messages.'
+      text = 'You have ' + messages.length + ' new messages.'
     }
 
     if (newCount > 0) {
@@ -383,7 +381,6 @@ mailNotifier = {
   },
 
   clear: function() {
-    this.newCount = 0
     if (this.notification) {
       this.notification.cancel()
     }
