@@ -22,7 +22,7 @@ button#login span { background-image:url(/images/login.svg); }
 .liked #logo { background:url(/images/reddit.svg) no-repeat center center, -webkit-linear-gradient(90deg, rgba(255,139,96,.75), rgba(255,139,96,.35)); }
 .disliked #logo { background:url(/images/reddit.svg) no-repeat center center, -webkit-linear-gradient(90deg, rgba(148,148,255,.75), rgba(148,148,255,.35)); }
 #buttons { white-space:nowrap; }
-#score { padding:0 10px; font-weight:bold; color:#969696; border-left:1px solid rgba(255,255,255,.65); }
+#score { padding:0 10px; font-weight:bold; color:#969696; border-left:1px solid rgba(255,255,255,.65); -webkit-transition-property:color; -webkit-transition-duration:.15s; }
 .liked #score { color:#FF8B60; }
 .disliked #score { color:#9494FF; }
 #title { padding:2px 10px 2px 0; color:#222; text-decoration:none; -webkit-user-select:text; -webkit-box-flex:1; }
