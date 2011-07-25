@@ -31,7 +31,7 @@ button#login span { background-image:url(/images/login.svg); }
 .logged-out .if-logged-in { display:none; }
 .logged-in .if-not-logged-in { display:none; }
 
-button#submit span { background-image:url(/images/submit.svg); background-position:right center; background-repeat:no-repeat; padding-left:0; padding-right:18px; }
+.button#submit span { background-image:url(/images/submit.svg); background-position:right center; background-repeat:no-repeat; padding-left:0; padding-right:18px; }
 input#title-input { -webkit-box-flex:1; background:-webkit-gradient(linear, left bottom, left top, color-stop(0, rgba(255,255,255,.7)), color-stop(.5, rgba(255,255,255,.8))); border:none; box-shadow:0 0 3px rgba(0,0,0,.75); padding:2px; margin:5px; border-radius:5px; }
 input#title-input:focus { outline:none; box-shadow:0 0 4px rgba(0,0,0,1); }
 input#title-input::-webkit-input-placeholder { color:#555; }
