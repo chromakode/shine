@@ -446,7 +446,11 @@ function setPageActionIcon(tab) {
   }
 }
 
+var workingPageActions = {}
 function onActionClicked(tab) {
+  if (tab.id in workingPageActions) { return }
+  workingPageActions[tab.id] = true
+
   var frame = 0
   var workingAnimation = window.setInterval(function() {
     try {
@@ -460,6 +464,7 @@ function onActionClicked(tab) {
   redditInfo.lookupURL(tab.url, true, function(info) {
     window.clearInterval(workingAnimation)
     setPageActionIcon(tab)
+    delete workingPageActions[tab.id]
     
     if (info) {
       tabStatus.showInfo(tab.id, info.name)
