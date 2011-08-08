@@ -41,7 +41,7 @@ function update() {
   fitHeight()
 
   if (info.permalink) {
-    $('#title').attr('href', 'http://reddit.com'+info.permalink)
+    $('#title').attr('href', 'http://www.reddit.com'+info.permalink)
   }
 
   if (info.likes == true) {
@@ -75,7 +75,7 @@ function update() {
 
 function initButtons() {
   if (buttonsReady || info._fake) { return }
-  $('#comments').attr('href', 'http://reddit.com'+info.permalink)
+  $('#comments').attr('href', 'http://www.reddit.com'+info.permalink)
   
   $('#upvote').click(function() {
     vote(info.likes == true ? null : true)
@@ -90,7 +90,7 @@ function initButtons() {
   })
 
   $('#login').click(function () {
-    window.open('http://reddit.com/login/')
+    window.open('http://www.reddit.com/login/')
   })
 
   $('#close').click(function() {

@@ -1,6 +1,6 @@
 function updateTarget() {
   var target =
-    'http://reddit.com/submit/?resubmit=true'+
+    'http://www.reddit.com/submit/?resubmit=true'+
     '&url='+window.location.hash.substr(1)+
     '&title='+encodeURIComponent($('#title-input').val())
   $('#submit').attr('href', target)
