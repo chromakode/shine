@@ -7,6 +7,7 @@ function initOptions() {
     'allowHttps': false,
     'notifyTimeout': false,
     'notifyTime': 30,
+    'showPageAction': true
   }
 
   for (key in defaultOptions) {
@@ -449,6 +450,11 @@ function urlProtocol(url) {
 }
 
 function setPageActionIcon(tab, info) {
+  if (localStorage['showPageAction'] != 'true') {
+    chrome.pageAction.hide(tab.id)
+    return
+  }
+
   switch (urlProtocol(tab.url)) {
     case 'https':
       if (localStorage['allowHttps'] != 'true') {
@@ -551,6 +557,7 @@ window.addEventListener('storage', function(e) {
       }
       break
     case 'allowHttps':
+    case 'showPageAction':
       setAllPageActionIcons()
       break
   }
@@ -570,7 +577,9 @@ function setAllPageActionIcons() {
 initOptions()
 console.log('Shine loaded.')
 redditInfo.init()
-setAllPageActionIcons()
+if (localStorage['showPageAction'] == 'true') {
+  setAllPageActionIcons()
+}
 if (localStorage['checkMail'] == 'true') {
   mailChecker.start()
 } else {
