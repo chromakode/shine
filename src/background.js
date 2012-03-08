@@ -217,6 +217,7 @@ tabStatus = {
         tabData = {port:port}
     console.log('Tab added', tabId)
     this.tabId[tabId] = tabData
+    port.onMessage.addListener(this.handleCommand.bind(this, tabId))
     port.onDisconnect.addListener(this.remove.bind(this, tabId))
   },
 
@@ -266,6 +267,15 @@ tabStatus = {
     this.send(tabId, {
       action: 'showSubmit'
     })
+  },
+
+  handleCommand: function(tabId, msg) {
+    console.log('Received message from tab', tabId, msg)
+    switch (msg.action) {
+      case 'closeTab':
+        chrome.tabs.remove(tabId)
+        break
+    }
   }
 }
 
