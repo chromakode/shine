@@ -434,14 +434,31 @@ mailChecker = {
   }
 }
 
+var protocolRe = /^(\w+):.*/
+function urlProtocol(url) {
+  var match = url && url.match(protocolRe)
+  return match && match[1]
+}
+
 function setPageActionIcon(tab, info) {
-  var pattern = (localStorage['allowHttps'] == 'true') ? /^https?:\/\/.*/ : /^http:\/\/.*/
-  if (pattern.test(tab.url)) {
-    var iconPath = info ? '/images/reddit.png' : '/images/reddit-inactive.png'
-    chrome.pageAction.setIcon({tabId:tab.id, path:iconPath})
-    chrome.pageAction.show(tab.id)
-  } else {
-    chrome.pageAction.hide(tab.id)
+  switch (urlProtocol(tab.url)) {
+    case 'https':
+      if (localStorage['allowHttps'] != 'true') {
+        chrome.pageAction.setIcon({tabId:tab.id, path:'/images/reddit-disabled.png'})
+        chrome.pageAction.setTitle({tabId:tab.id, title:'Companion is disabled on secure pages (enable in the options)'})
+        chrome.pageAction.show(tab.id)
+        break
+      }
+      // Otherwise, fall through...
+    case 'http':
+      var iconPath = info ? '/images/reddit.png' : '/images/reddit-inactive.png'
+      chrome.pageAction.setIcon({tabId:tab.id, path:iconPath})
+      chrome.pageAction.setTitle({tabId:tab.id, title:'Show reddit information'})
+      chrome.pageAction.show(tab.id)
+      break
+
+    default:
+      chrome.pageAction.hide(tab.id)
   }
 }
 
@@ -500,7 +517,7 @@ chrome.extension.onConnect.addListener(function(port) {
           console.log('Auto-show disabled. Ignoring reddit page', info)
         } else if (localStorage['autoShowSelf'] == 'false' && info.is_self) {
           console.log('Ignoring self post', info)
-        } else if (localStorage['allowHttps'] == 'false' && /^https:\/\/.*/.test(tab.url)) {
+        } else if (localStorage['allowHttps'] == 'false' && urlProtocol(tab.url) == 'https') {
           console.log('Https page. Ignoring', info)
         } else if (barStatus.hidden[info.name]) {
           console.log('Bar was closed on this page. Ignoring.', info)
