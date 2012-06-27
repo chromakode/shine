@@ -6,7 +6,7 @@ h1 > img { height:64px; padding-right:10px; vertical-align:middle; }
 #container a { color:#777; }
 #contents { margin:1em 0; border:1px solid #dedede; border-left:0; border-right:0; }
 #contents > section { margin:2em 0; }
-section > .options { margin-top:.5em; padding-left:15px; }
+section > .options { margin-top:.5em; padding:0 15px; }
 section > shinebar, section > .notification-demo { border-radius:5px; box-shadow: 0 1px 8px rgba(0,0,0,.75); }
 .notification-demo { position:relative; font-size:.8em; background:url(/images/reddit-mail.svg) white 10px 7px no-repeat; width:225px; padding:5px; padding-left:50px; }
 .notification-demo > .close { position:absolute; top:10px; right:10px; width:7px; height:7px; opacity:.5; }
