@@ -16,8 +16,14 @@ section > shinebar, section > .notification-demo { border-radius:5px; box-shadow
 .options li { list-style-type:none; }
 .options label { display: inline-block; font-weight:bold; cursor:pointer; }
 .options input[type="checkbox"] { cursor:pointer; }
-shinebar, .notification-demo, section li { -webkit-transition-property:opacity; -webkit-transition-duration:.15s; }
+.options input[type="number"] { width:50px; }
+.options .finePrint { font-size:.7em; font-weight:bold; }
+.options #notifyTime { margin-left:25px; width:425px; }
+.options #numSeconds { border-bottom:1px dotted black; }
+shinebar, .notification-demo, section li, #notifyTime { -webkit-transition-property:opacity; -webkit-transition-duration:.15s; }
 #contents shinebar, #contents section.bar li { opacity:.5; }
 #contents.autoShow shinebar, #contents.autoShow section.bar li, #contents section.bar li:first-child { opacity:1; }
-#contents .notification-demo { opacity:.5; }
-#contents.checkMail .notification-demo { opacity:1; }
+#contents .notification-demo, #contents section.notifications li { opacity:.5; }
+#contents.checkMail .notification-demo, #contents.checkMail section.notifications li, #contents section.notifications li:first-child { opacity:1; }
+#notifyTime { opacity:.5; }
+#contents.checkMail.notifyTimeout #notifyTime { opacity: 1; }
