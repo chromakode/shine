@@ -434,7 +434,7 @@ Notifier.prototype = {
 
   notify: function(messages, force) {
     var newIdx = null,
-        lastSeen = force ? this.lastSeen - 1 : this.lastSeen,
+        lastSeen = force ? 0 : this.lastSeen,
         newCount = 0
 
     var data = this.processMessageList(messages, lastSeen)
