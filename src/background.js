@@ -509,7 +509,7 @@ mailNotifier = new Notifier(
 
 modmailNotifier = new Notifier(
   'http://www.reddit.com/message/moderator/',
-  'images/reddit-mail.svg',
+  'images/reddit-modmail.svg',
   'reddit: new modmail!',
   'You have {count} new moderator messages.'
 )
