@@ -4,6 +4,7 @@ function initOptions() {
     'autoShowSelf': true,
     'showTooltips': true,
     'checkMail': true,
+    'checkModMail': true,
     'allowHttps': false,
     'notifyTimeout': false,
     'notifyTime': 30,
@@ -62,6 +63,7 @@ redditInfo = {
         if (resp.data) {
           console.log('Updated reddit user data', resp.data)
           this.storeModhash(resp.data.modhash)
+          this.storeUsername(resp.data.name)
           if (callback) { callback(resp.data) }
         }
       }.bind(this),
@@ -69,9 +71,11 @@ redditInfo = {
     })
   },
 
-  fetchMail: function(callback) {
+  fetchMail: function(callback, isModMail) {
     this.request({
-      url: 'http://www.reddit.com/message/unread.json',
+      url: isModMail ?
+            'http://www.reddit.com/message/moderator.json' :
+            'http://www.reddit.com/message/unread.json',
       success: function(resp) {
         if (resp.data) {
           callback(resp.data.children)
@@ -201,11 +205,16 @@ redditInfo = {
   },
 
   init: function() {
+    this.user    = localStorage['username']
     this.modhash = localStorage['modhash']
   },
     
   storeModhash: function(modhash) {
     localStorage['modhash'] = this.modhash = modhash
+  },
+
+  storeUsername: function(username) {
+    localStorage['username'] = this.user = username
   }
 }
 
@@ -363,58 +372,110 @@ barStatus = {
   }
 }
 
-mailNotifier = {
-  lastSeen: null,
-  notify: function(messages) {
-    var newIdx = null,
-        lastSeen = this.lastSeen,
-        newCount = 0
-    for (i = 0; i < messages.length; i++) {
-      var messageTime = messages[i].data.created_utc*1000
-      if (!lastSeen || messageTime > lastSeen) {
-        newCount++
-        if (!newIdx) { newIdx = i }
-        this.lastSeen = Math.max(this.lastSeen, messageTime)
-      }
+Notifier.prototype = {
+  url: null,
+  image: null,
+  title: null,
+  text: null,
+  localStorageKey: null,
+  lastSeen: 0,
+  notification: null,
+  /*
+   * Returned object:
+   * count: Number of new messages
+   * title: Title of first new message, or null
+   * body:  Body of first new message, or null
+   * time:  The most recent message timestamp among
+   *        this message and any of its children.
+   */
+  processMessage: function(message, since) {
+    var data = message.data
+    var rv = {
+      count: 0,
+      title: null,
+      body:  null,
+      time:  since
     }
 
-    console.log('New messages: ', newCount)
+    if (data.replies) {
+      rv = this.processMessageList(data.replies.data.children, since)
+    }
+
+    if (data.author != redditInfo.user && data.created_utc > since) {
+      rv.count++
+      rv.title = data.author + ': ' + data.subject
+      rv.body  = data.body
+      rv.time  = Math.max(rv.time, data.created_utc)
+      console.log('New message: ', data)
+    }
+
+    return rv
+  },
+
+  processMessageList: function(messages, since) {
+    var rv = {
+      count: 0,
+      title: null,
+      body:  null,
+      time:  since
+    }
+
+    for (var i = 0; i < messages.length; i++) {
+      var messageData = this.processMessage(messages[i], since)
+      rv.count += messageData.count
+      rv.title = rv.title || messageData.title
+      rv.body  = rv.body  || messageData.body
+      rv.time  = Math.max(rv.time, messageData.time)
+    }
+
+    return rv
+  },
+
+
+  notify: function(messages, force) {
+    var newIdx = null,
+        lastSeen = force ? this.lastSeen - 1 : this.lastSeen,
+        newCount = 0
+
+    var data = this.processMessageList(messages, lastSeen)
+
+    localStorage[this.localStorageKey] = this.lastSeen = data.time
+
+    console.log('New messages: ', data.count)
 
     var title, text
-    if (newCount == 1) {
-      var message = messages[newIdx]
-      if (localStorage['notifyMessageContents'] == 'true') {
-        title = message.data.author + ': ' + message.data.subject
-        text = message.data.body
-      } else {
+    if (data.count > 1) {
+      title = this.title
+      text = this.text.replace('{count}', data.count)
+    } else if (data.count == 1) {
+      if (localStorage['notificationPrivacy'] == 'true') {
         title = 'reddit: new message!'
         text = 'You have a new message.'
+      } else {
+        title = data.title
+        text  = data.body
       }
-    } else if (newCount > 1) {
-      title = 'reddit: new messages!'
-      text = 'You have ' + messages.length + ' new messages.'
+    } else {
+      return
     }
 
-    if (newCount > 0) {
-      this.showNotification(title, text)
-    }
+    this.showNotification(title, text)
   },
 
   clear: function() {
     if (this.notification) {
       this.notification.cancel()
     }
+
+    this.notification = null
   },
 
-  notification: null,
   showNotification: function(title, text) {
-    if (this.notification) {
-      this.notification.cancel()
-    }
+    this.clear()
 
     var n = this.notification =
-      webkitNotifications.createNotification('images/reddit-mail.svg', title, text)
-
+      webkitNotifications.createNotification(this.image, title, text)
+	
     if (localStorage['notifyTimeout'] == 'true') {
       setTimeout(function() {
         n.cancel()
@@ -422,13 +483,36 @@ mailNotifier = {
     }
 
     this.notification.onclick = function() {
-      window.open('http://www.reddit.com/message/unread/')
+      window.open(this.url)
       n.cancel()
-    }
+    }.bind(this)
 
     this.notification.show()
   }
 }
+
+function Notifier(url, image, title, text) {
+  this.url = url
+  this.image = image
+  this.title = title
+  this.text = text
+  this.localStorageKey = 'last-seen:'+url
+  this.lastSeen = parseFloat(localStorage[this.localStorageKey]) || 0
+}
+
+mailNotifier = new Notifier(
+  'http://www.reddit.com/message/unread/',
+  'images/reddit-mail.svg',
+  'reddit: new messages!',
+  'You have {count} new messages.'
+)
+
+modmailNotifier = new Notifier(
+  'http://www.reddit.com/message/moderator/',
+  'images/reddit-mail.svg',
+  'reddit: new modmail!',
+  'You have {count} new moderator messages.'
+)
 
 mailChecker = {
   checkInterval: 5*60*1000,
@@ -448,12 +532,18 @@ mailChecker = {
       this.interval = null
     }
   },
-  check: function() {
+  check: function(force) {
     redditInfo.update(function(info) {
-      if (info.has_mail) {
-        redditInfo.fetchMail(mailNotifier.notify.bind(mailNotifier))
+      if (info.has_mail || force) {
+        redditInfo.fetchMail(function(m) { mailNotifier.notify(m, force) }, false)
       } else {
         mailNotifier.clear()
+      }
+
+      if (localStorage.checkModMail == 'true' && (info.has_mod_mail || force)) {
+        redditInfo.fetchMail(function(m) { modmailNotifier.notify(m, force) }, true)
+      } else {
+        modmailNotifier.clear()
       }
     })
   }
