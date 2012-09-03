@@ -378,6 +378,14 @@ barStatus = {
   }
 }
 
+function Notifier(url, image, title, text) {
+  this.url = url
+  this.image = image
+  this.title = title
+  this.text = text
+  this.localStorageKey = 'last-seen:'+url
+  this.lastSeen = parseFloat(localStorage[this.localStorageKey]) || 0
+}
 Notifier.prototype = {
   url: null,
   image: null,
@@ -438,6 +446,24 @@ Notifier.prototype = {
     return rv
   },
 
+  notify: function(messages, force) {
+    var newIdx = null,
+        lastSeen = force ? 0 : this.lastSeen,
+        newCount = 0
+
+    var data = this.processMessageList(messages, lastSeen)
+
+    localStorage[this.localStorageKey] = this.lastSeen = data.time
+
+    console.log('New messages: ', data.count)
+
+    var n = this.createNotification(data)
+
+    if (n) {
+      this.showNotification(n)
+    }
+  },
+
   createNotification: function(data) {
     var substPlural = function(text) {
       return text.replace('{count}', data.count).replace('{s}', data.count > 1 ? 's' : '')
@@ -469,24 +495,6 @@ Notifier.prototype = {
     }
   },
 
-  notify: function(messages, force) {
-    var newIdx = null,
-        lastSeen = force ? 0 : this.lastSeen,
-        newCount = 0
-
-    var data = this.processMessageList(messages, lastSeen)
-
-    localStorage[this.localStorageKey] = this.lastSeen = data.time
-
-    console.log('New messages: ', data.count)
-
-    var n = this.createNotification(data)
-
-    if (n) {
-      this.showNotification(n)
-    }
-  },
-
   clear: function() {
     if (this.notification) {
       this.notification.cancel()
@@ -512,15 +520,6 @@ Notifier.prototype = {
 
     this.notification.show()
   }
-}
-
-function Notifier(url, image, title, text) {
-  this.url = url
-  this.image = image
-  this.title = title
-  this.text = text
-  this.localStorageKey = 'last-seen:'+url
-  this.lastSeen = parseFloat(localStorage[this.localStorageKey]) || 0
 }
 
 mailNotifier = new Notifier(
