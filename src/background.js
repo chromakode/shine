@@ -454,7 +454,7 @@ Notifier.prototype = {
 
     if (isRich) {
       return webkitNotifications.createHTMLNotification(
-        'mail.html#'+JSON.stringify({
+        'mail-notification.html#'+JSON.stringify({
           image: this.image,
           message: data.latest_message
         })
