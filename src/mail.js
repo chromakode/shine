@@ -10,12 +10,12 @@ $(document).ready(function() {
   }
 
   $('#mail-image').attr('src', expand(data.image))
-  $('#from').html(data.info.author)
-  if (data.info.subreddit) {
-    $('#r').html('/r/'+data.info.subreddit).addClass('sr')
+  $('#from').html(data.message.author)
+  if (data.message.subreddit) {
+    $('#r').html('/r/'+data.message.subreddit).addClass('sr')
   } else {
     $('#r').html('private message')
   }
-  $('#subject').html(data.info.subject)
-  $('#body').html(expand(data.info.body_html))
+  $('#subject').html(data.message.subject)
+  $('#body').html(expand(data.message.body_html))
 })

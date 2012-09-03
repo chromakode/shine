@@ -395,55 +395,34 @@ Notifier.prototype = {
   lastSeen: 0,
   notification: null,
 
-  createDefaultValue: function(since) {
-    return {
-      count: 0,          // Number of new messages,
-      time:  since,      // Most recent time among all messages found.
-      info: {            // Information for the *most recent* message:
-        author:    null, //   Message author
-        subject:   null, //   Message subject
-        dest:      null, //   Message destination (typically you, but can be different for modmail)
-        body:      null, //   Message body (Markdown)
-        body_html: null, //   Message body (HTML)
-        subreddit: null, //   Message subreddit (set for replies/modmail, null for PMs)
-      }
-    }
-  },
-
-  processMessage: function(message, since) {
-    var data = message.data
-    var rv = this.createDefaultValue(since)
-
-    if (data.replies) {
-      rv = this.processMessageList(data.replies.data.children, since)
-    }
-
-    if (data.author != redditInfo.user && data.created_utc > rv.time) {
-      rv.count++
-      rv.time = Math.max(rv.time, data.created_utc)
-      for (var i in rv.info) {
-        rv.info[i] = data[i]
-      }
-      console.log('New message: ', data)
-    }
-
-    return rv
-  },
-
   processMessageList: function(messages, since) {
-    var rv = this.createDefaultValue(since)
-
-    for (var i = 0; i < messages.length; i++) {
-      var messageData = this.processMessage(messages[i], since)
-
-      rv.count += messageData.count
-      if (rv.time < messageData.time) {
-        rv.time = messageData.time
-        rv.info = messageData.info
+    var result = {
+      count: 0,
+      latest_message: {
+        created_utc: since
       }
     }
 
-    return rv
+    function processMessages(messages) {
+      messages.forEach(function(message) {
+        var data = message.data
+
+        if (data.author != redditInfo.user && data.created_utc > since) {
+          result.count++
+          if (data.created_utc > result.latest_message.created_utc) {
+            result.latest_message = data
+          }
+          console.log('New message: ', data)
+        }
+
+        if (data.replies) {
+          rv = processMessages(data.replies.data.children)
+        }
+      })
+    }
+
+    processMessages(messages)
+    return result
   },
 
   notify: function(messages) {
@@ -451,8 +430,7 @@ Notifier.prototype = {
         newCount = 0
 
     var data = this.processMessageList(messages, this.lastSeen)
-
-    localStorage[this.localStorageKey] = this.lastSeen = data.time
+    localStorage[this.localStorageKey] = this.lastSeen = data.latest_message.created_utc
 
     console.log('New messages: ', data.count)
 
@@ -483,7 +461,7 @@ Notifier.prototype = {
       return webkitNotifications.createHTMLNotification(
         'mail.html#'+JSON.stringify({
           image: this.image,
-          info:  data.info
+          message: data.latest_message
         })
       )
     } else {
@@ -523,8 +501,7 @@ Notifier.prototype = {
   demo: function() {
     var data = {
       count: 1,
-      time:  Date.now(),
-      info: {
+      latest_message: {
         author: 'test_sender',
         subject: 'test',
         dest: 'tester',
