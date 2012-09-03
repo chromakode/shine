@@ -387,11 +387,6 @@ function Notifier(url, image, title, text) {
   this.lastSeen = parseFloat(localStorage[this.localStorageKey]) || 0
 }
 Notifier.prototype = {
-  url: null,
-  image: null,
-  title: null,
-  text: null,
-  localStorageKey: null,
   lastSeen: 0,
   notification: null,
 
