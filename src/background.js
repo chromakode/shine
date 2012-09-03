@@ -446,12 +446,11 @@ Notifier.prototype = {
     return rv
   },
 
-  notify: function(messages, force) {
+  notify: function(messages) {
     var newIdx = null,
-        lastSeen = force ? 0 : this.lastSeen,
         newCount = 0
 
-    var data = this.processMessageList(messages, lastSeen)
+    var data = this.processMessageList(messages, this.lastSeen)
 
     localStorage[this.localStorageKey] = this.lastSeen = data.time
 
@@ -519,6 +518,24 @@ Notifier.prototype = {
     }.bind(this)
 
     this.notification.show()
+  },
+
+  demo: function() {
+    var data = {
+      count: 1,
+      time:  Date.now(),
+      info: {
+        author: 'test_sender',
+        subject: 'test',
+        dest: 'tester',
+        body: 'hello! how are you?\n\n#heading 1\n##heading 2\n###heading 3\n####heading 4\n#####heading 5\n######heading 6\n\nhello, world!\n\n    hello, code.\n\n*farewell.*',
+        body_html: '<div class=\"md\"><p>hello! how are you?</p><h1>heading 1</h1>\n\n<h2>heading 2</h2>\n\n<h3>heading 3</h3>\n\n<h4>heading 4</h4>\n\n<h5>heading 5</h5>\n\n<h6>heading 6</h6>\n\n<p>hello, world!</p>\n\n<pre><code>hello, code.\n</code></pre>\n\n<p><em>farewell.</em></p>\n</div>',
+        subreddit: 'test',
+      }
+    }
+    this.showNotification(this.createNotification(data))
+    data.count = 2
+    this.showNotification(this.createNotification(data))
   }
 }
 
@@ -554,16 +571,16 @@ mailChecker = {
       this.interval = null
     }
   },
-  check: function(force) {
+  check: function() {
     redditInfo.update(function(info) {
-      if (info.has_mail || force) {
-        redditInfo.fetchMail(function(m) { mailNotifier.notify(m, force) })
+      if (info.has_mail) {
+        redditInfo.fetchMail(mailNotifier.notify.bind(mailNotifier))
       } else {
         mailNotifier.clear()
       }
 
-      if (localStorage.checkModMail == 'true' && (info.has_mod_mail || force)) {
-        redditInfo.fetchModMail(function(m) { modmailNotifier.notify(m, force) })
+      if (localStorage.checkModMail == 'true' && info.has_mod_mail) {
+        redditInfo.fetchModMail(modmailNotifier.notify.bind(modmailNotifier))
       } else {
         modmailNotifier.clear()
       }
