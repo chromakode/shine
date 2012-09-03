@@ -460,6 +460,7 @@ Notifier.prototype = {
     var n = this.createNotification(data)
 
     if (n) {
+      this.clear()
       this.showNotification(n)
     }
   },
@@ -504,7 +505,6 @@ Notifier.prototype = {
   },
 
   showNotification: function(n) {
-    this.clear()
     this.notification = n
 
     if (localStorage['notifyTimeout'] == 'true') {
