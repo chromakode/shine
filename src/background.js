@@ -71,11 +71,9 @@ redditInfo = {
     })
   },
 
-  fetchMail: function(callback, isModMail) {
+  _fetchMail: function(url, callback) {
     this.request({
-      url: isModMail ?
-            'http://www.reddit.com/message/moderator.json' :
-            'http://www.reddit.com/message/unread.json',
+      url: url,
       success: function(resp) {
         if (resp.data) {
           callback(resp.data.children)
@@ -83,6 +81,14 @@ redditInfo = {
       },
       error: function() { callback(false) }
     })
+  },
+
+  fetchMail: function(callback) {
+    this._fetchMail('http://www.reddit.com/message/unread.json', callback)
+  },
+
+  fetchModMail: function(callback) {
+    this._fetchMail('http://www.reddit.com/message/moderator.json', callback)
   },
 
   _queryInfo: function(params, callback) {
@@ -552,13 +558,13 @@ mailChecker = {
   check: function(force) {
     redditInfo.update(function(info) {
       if (info.has_mail || force) {
-        redditInfo.fetchMail(function(m) { mailNotifier.notify(m, force) }, false)
+        redditInfo.fetchMail(function(m) { mailNotifier.notify(m, force) })
       } else {
         mailNotifier.clear()
       }
 
       if (localStorage.checkModMail == 'true' && (info.has_mod_mail || force)) {
-        redditInfo.fetchMail(function(m) { modmailNotifier.notify(m, force) }, true)
+        redditInfo.fetchModMail(function(m) { modmailNotifier.notify(m, force) })
       } else {
         modmailNotifier.clear()
       }
