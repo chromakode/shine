@@ -3,8 +3,7 @@ function msgJSON(request) {
 }
 
 function fitHeight() {
-  msgJSON({action:'height', height:$('#bar').height()})
-  $('#bar').width('100%')
+  msgJSON({action:'height', height:document.body.offsetHeight})
 }
 
 function getRandomInt(min, max) {
