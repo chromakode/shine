@@ -15,5 +15,8 @@ $(document).ready(function() {
     $('#r').html('private message')
   }
   $('#subject').html(data.message.subject)
+
+  // WARNING: this depends on the CSP to prevent unsafe-inline scripts in the
+  // body_html from executing.
   $('#body').html(expand(data.message.body_html))
 })
