@@ -8,13 +8,13 @@ $(document).ready(function() {
   console.log('Received message data:', data)
 
   $('#mail-image').attr('src', data.image)
-  $('#from').html(data.message.author)
+  $('#from').text(data.message.author)
   if (data.message.subreddit) {
-    $('#r').html('/r/'+data.message.subreddit).addClass('sr')
+    $('#r').text('/r/'+data.message.subreddit).addClass('sr')
   } else {
-    $('#r').html('private message')
+    $('#r').text('private message')
   }
-  $('#subject').html(data.message.subject)
+  $('#subject').text(data.message.subject)
 
   // WARNING: this depends on the CSP to prevent unsafe-inline scripts in the
   // body_html from executing.
