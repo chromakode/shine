@@ -62,9 +62,7 @@ function update() {
   } else {
     $('#bar').removeClass('saved')
   }
-  if (localStorage['showTooltips'] != 'false') {
-    $('#save').attr('title', info.saved ? 'Unsave' : 'Save')
-  }
+  $('#save').attr('title', info.saved ? 'Unsave' : 'Save')
 
   $('#score').text(info.score)
   if (info.subreddit) {
@@ -107,9 +105,6 @@ function initButtons() {
 }
 
 $(document).ready(function() {
-  if (localStorage['showTooltips'] == 'false') {
-    $('#bar *[title]').removeAttr('title')
-  }
   $(window).resize(fitHeight)
 })
 

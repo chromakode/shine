@@ -2,7 +2,6 @@ function initOptions() {
   defaultOptions = {
     'autoShow': true,
     'autoShowSelf': true,
-    'showTooltips': true,
     'checkMail': true,
     'checkModMail': true,
     'allowHttps': false,
