@@ -1,13 +1,13 @@
 body { margin:5px; font:normal small verdana, arial, helvetica, sans-serif; cursor:pointer; overflow:hidden; }
-td { font-size:small; }
-p { margin:5px 2px; }
-#text-cell > p:first-child { margin-top:0 }
-#img-cell { width:18px; padding-right:2px; }
-#img-cell > img { margin-top:1px; }
+#icon { height:32px; width:32px; float:left; }
+#title { font-weight:bold; }
+#title, #subject { margin-left:38px; font-family:helvetica, arial, sans-serif; font-size:13px; }
 #from, #r.sr { font-weight:bold; }
-#header { font-size:smaller; margin-bottom:3px; }
-#subject { font-weight:bold; }
-.userlink { text-decoration:none; cursor:pointer; color:blue; }
+#from { color:#336699; }
+#r { color:black; }
+#divider { border:none; border-bottom:1px dotted #888; margin-bottom:.25em; }
+#description { color:#888; font-size:x-small; }
+.md { margin-left:15px; }
 
 /* from reddit's /public/static/css/reddit.css */
 .md { font: normal x-small verdana, arial, helvetica, sans-serif; }
