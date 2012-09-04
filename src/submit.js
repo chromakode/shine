@@ -24,7 +24,7 @@ $(document).ready(function() {
       window.top.location = $('#submit').attr('href')
     }
   })
-  
+
   $('#close').click(function() {
     msgJSON({action:'close'})
   })

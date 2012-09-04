@@ -36,7 +36,7 @@ redditInfo = {
   getURL: function(url) {
     return this.url[url]
   },
-  
+
   setURL: function(url, info) {
     info._ts = info._ts || Date.now()
     var stored = this.fullname[info.name]
@@ -114,7 +114,7 @@ redditInfo = {
       error: function() { callback(false) }
     })
   },
-  
+
   _storedLookup: function(keyName, key, array, useStored, callback) {
     // Internal rate limited cached info getter.
     //
@@ -142,7 +142,7 @@ redditInfo = {
         console.log('Info already being fetched. Skipping update.', stored)
         return false
       }
-    
+
       storedAge = Math.floor((now - stored._ts) / 1000)
       if (storedAge < redditInfo.freshAgeThreshold) {
         console.log('Info is', storedAge, 'seconds old. Skipping update.', stored)
@@ -172,7 +172,7 @@ redditInfo = {
 
   _thingAction: function(action, data, callback) {
     if (!this.isLoggedIn()) { callback(false, 'not logged in') }
-    
+
     data.uh = this.modhash
     this.request({
       type: 'POST',
@@ -192,7 +192,7 @@ redditInfo = {
     } else {
       dir = 0
     }
-    
+
     this._thingAction('vote', {id:fullname, dir:dir}, callback)
   },
 
@@ -203,7 +203,7 @@ redditInfo = {
   unsave: function(fullname, callback) {
     this._thingAction('unsave', {id:fullname}, callback)
   },
-  
+
   isLoggedIn: function() {
     // TODO: check for cookie
     return this.modhash != null && this.modhash != ''
@@ -213,7 +213,7 @@ redditInfo = {
     this.user    = localStorage['username']
     this.modhash = localStorage['modhash']
   },
-    
+
   storeModhash: function(modhash) {
     localStorage['modhash'] = this.modhash = modhash
   },
@@ -264,7 +264,7 @@ tabStatus = {
       fullname: fullname
     })
   },
-  
+
   updateTab: function(tabId) {
     var tabData = this.tabId[tabId]
     if (tabData && tabData.bar) {
@@ -336,7 +336,7 @@ barStatus = {
       })
     }.bind(this))
   },
-  
+
   updateInfo: function(info) {
     if (this.fullname[info.name]) {
       this.fullname[info.name].forEach(function(barData) {
@@ -607,12 +607,12 @@ function onActionClicked(tab) {
     }
     frame = (frame + 1) % 6
   }, 200)
-  
+
   redditInfo.lookupURL(tab.url, true, function(info) {
     window.clearInterval(workingAnimation)
     setPageActionIcon(tab, info)
     delete workingPageActions[tab.id]
-    
+
     if (info) {
       tabStatus.showInfo(tab.id, info.name)
     } else {

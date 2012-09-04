@@ -21,7 +21,7 @@ ShineOverlay.prototype = {
     this.overlay.appendChild(this.frame)
     document.documentElement.appendChild(this.overlay)
   },
-  
+
   setHeight: function(height) {
     if (height) {
       this.overlay.style.height = height
@@ -36,7 +36,7 @@ ShineOverlay.prototype = {
     }.bind(this))
     this.setHeight(0)
   },
-  
+
   _display: function(url) {
     this.frame.setAttribute('src', chrome.extension.getURL(url))
   },

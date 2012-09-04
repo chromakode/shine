@@ -36,7 +36,7 @@ function update() {
   initButtons()
 
   $('#title').text(info.title)
-  
+
   if (loggedIn) {
     $('#bar').removeClass('logged-out').addClass('logged-in')
   } else {
@@ -79,7 +79,7 @@ function update() {
 function initButtons() {
   if (buttonsReady || info._fake) { return }
   $('#comments').attr('href', 'http://www.reddit.com'+info.permalink)
-  
+
   $('#upvote').click(function(evt) {
     vote(info.likes == true ? null : true, evt.shiftKey)
   })
