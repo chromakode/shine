@@ -8,3 +8,37 @@ p { margin:5px 2px; }
 #header { font-size:smaller; margin-bottom:3px; }
 #subject { font-weight:bold; }
 .userlink { text-decoration:none; cursor:pointer; color:blue; }
+
+/* from reddit's /public/static/css/reddit.css */
+.md { font: normal x-small verdana, arial, helvetica, sans-serif; }
+.md * { margin:0; padding:0; }
+.md h1 { font-size: 18px; font-weight: normal; margin: 10px 0; }
+.md h2 { color: #369; font-size: 13px; }
+.md h2 a { text-decoration: none; }
+.md h2 a:visited { color: #369; }
+.md h2 a:hover { text-decoration: underline; }
+.md h3 { font-size:110%; }
+.md a img { border: 0 none; }
+.md a { text-decoration: none; color: #369; }
+.md { max-width: 60em; overflow: auto; font-size: small; }
+.md p, .md h1 { margin: 5px 0; }
+.md h1 { font-weight: normal; font-size: 100%; }
+.md > * { margin-bottom: 0px; }
+.md strong { font-weight: bold; }
+.md em { font-style: italic; }
+.md strong em { font-style: italic; font-weight: bold; }
+.md img { display: none }
+.md ol, .md ul { margin: 10px 2em; }
+.md ul { list-style: disc outside }
+.md ol { list-style: decimal outside }
+.md pre { margin: 10px; }
+.md blockquote, .help blockquote {
+    border-left: 2px solid #369;
+    padding-left: 4px;
+    margin: 5px;
+    margin-right: 15px;
+}
+.md td, .md th { border: 1px solid #EEE; padding: 1px 3px; }
+.md th { font-weight: bold; }
+.md table { margin: 5px 10px; }
+.md center { text-align: left; }
