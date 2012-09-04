@@ -1,4 +1,6 @@
 $(document).ready(function() {
+  $('shinebar iframe').attr('src', chrome.extension.getURL('bar.html') + '#_shine_demo')
+
   var messages = [
     'greetings, human.',
     'someone is wrong on the internet!',
