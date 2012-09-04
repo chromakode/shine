@@ -1,3 +1,18 @@
+== Version 1.2.0 ==
+* Display markdown formatting in notifications. [marklr + blueshiftlabs]
+* Add modmail notifications. [blueshiftlabs]
+* Add option to close tab / go back after voting. [blueshiftlabs]
+* Add option to not display message content in notifications. [mhweaver]
+* Add option to hide page action icon. [mhweaver]
+* Add configurable message notification timeouts. [sc0tt]
+* Add preference to display bar on https pages. [mhweaver]
+* Fix bug where clicking thumbnails wouldn't open bar. [mhweaver]
+* Fix bug where submission title is truncated. [mhweaver]
+* Fix bug where clicking the submit button didn't fill in the URL. [chromakode]
+* Add strict CSP for extra security. [chromakode]
+* Update internal jQuery to 1.8.0. [chromakode]
+* Update to latest Chrome manifest style. [chromakode]
+
 == Version 1.1.1 ==
 * Use canonical www. prefix when linking to reddit.com. [chromakode]
 
