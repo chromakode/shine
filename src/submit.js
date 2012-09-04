@@ -30,5 +30,6 @@ $(document).ready(function() {
   })
 
   randomMsg()
+  updateTarget()
   fitHeight()
 })
