@@ -210,7 +210,7 @@ redditInfo = {
   },
 
   init: function() {
-    this.user    = localStorage['username']
+    this.user = localStorage['username']
     this.modhash = localStorage['modhash']
   },
 
