@@ -35,7 +35,7 @@ function toggleSaved() {
 function update() {
   initButtons()
 
-  $('#title').text(info.title)
+  $('#title').text(expand(info.title))
 
   if (loggedIn) {
     $('#bar').removeClass('logged-out').addClass('logged-in')

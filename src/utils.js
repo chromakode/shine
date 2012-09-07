@@ -14,3 +14,7 @@ function getRandomInt(min, max) {
 function randomChoice(items) {
   return items[getRandomInt(0, items.length-1)]
 }
+
+function expand(text) {
+  return unescape(text).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
+}

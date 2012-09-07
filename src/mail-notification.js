@@ -1,7 +1,3 @@
-function expand(text) {
-  return unescape(text).replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&')
-}
-
 $(document).ready(function() {
   var data = JSON.parse(window.location.hash.substr(1))
 
