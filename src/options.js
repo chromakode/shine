@@ -10,6 +10,29 @@ $(document).ready(function() {
   ]
   $('.notification-demo > .message').text(randomChoice(messages))
 
+  var prefHandlers = {
+    allowHttps: function(name, value) {
+      if (value) {
+        chrome.permissions.request({
+          origins: ['https://*/*']
+        }, function(granted) {
+          prefHandlers.checkbox(name, granted)
+        })
+      } else {
+        chrome.permissions.remove({
+          origins: ['https://*/*']
+        }, function(removed) {
+          prefHandlers.checkbox(name, !removed)
+        })
+      }
+    },
+
+    checkbox: function(name, value) {
+      localStorage[name] = value
+      $('#contents').toggleClass(name, value)
+    }
+  }
+
   $('input[type=checkbox]')
     .each(function(i, el) {
       if (localStorage[el.id] == 'true') {
@@ -18,9 +41,9 @@ $(document).ready(function() {
       }
     })
     .click(function() {
-      var value= $(this).is(':checked')
-      localStorage[this.id] = value
-      $('#contents').toggleClass(this.id, value)
+      var value = $(this).is(':checked'),
+          handler = prefHandlers[this.id] || prefHandlers.checkbox
+      handler(this.id, value)
     })
 
   $('#notifyTime')

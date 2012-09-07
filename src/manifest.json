@@ -9,6 +9,9 @@
     "notifications",
     "http://*/*"
   ],
+  "optional_permissions": [
+    "https://*/*"
+  ],
   "content_security_policy": "default-src 'self'; connect-src 'self' http://www.reddit.com",
   "icons": {
     "16"  : "images/shine-16.png",
@@ -29,7 +32,7 @@
       "js": ["debug.js", "redditContent.js"]
     },
     {
-      "matches": ["http://*/*", "https://*/*"],
+      "matches": ["http://*/*"],
       "run_at": "document_start",
       "js": ["debug.js", "pageOverlay.js"],
       "css": ["pageOverlay.css"]

@@ -223,13 +223,61 @@ redditInfo = {
   }
 }
 
+function addContent(tab, files, callback) {
+  var startTime = Date.now()
+
+  function injectNext() {
+    var fileInfo = files.shift()
+    if (fileInfo) {
+      var extension = fileInfo.file.match(/\.\w+$/)
+      extension = extension && extension[0]
+
+      console.log('Injecting', fileInfo.file, fileInfo)
+      if (extension == '.js') {
+        var inject = chrome.tabs.executeScript
+      } else if (extension == '.css') {
+        var inject = chrome.tabs.insertCSS
+      } else {
+        throw "Invalid file extension."
+      }
+
+      inject(tab.id, fileInfo, function() {
+        injectNext()
+      })
+    } else {
+      console.log("Content injection took", Date.now() - startTime, 'ms')
+      if (callback) { callback() }
+    }
+  }
+
+  injectNext()
+}
+
+function addOverlayContent(tab, callback) {
+  addContent(tab, [
+      {file:'pageOverlay.css', runAt:'document_start'},
+      {file:'debug.js', runAt:'document_start'},
+      {file:'pageOverlay.js', runAt:'document_start'}
+  ], callback)
+}
+
 tabStatus = {
   tabId: {},
+  injecting: {},
+
+  ensureOverlay: function(tab) {
+    var needsOverlay = localStorage['allowHttps'] == 'true' && urlProtocol(tab.url) == 'https'
+    if (needsOverlay && !(tab.id in this.tabId) && !(tab.id in this.injecting)) {
+      this.injecting[tab.id] = true
+      addOverlayContent(tab)
+    }
+  },
 
   add: function(port) {
     var tabId = port.sender.tab.id,
         tabData = {port:port}
     console.log('Tab added', tabId)
+    delete this.injecting[tabId]
     this.tabId[tabId] = tabData
     port.onMessage.addListener(this.handleCommand.bind(this, tabId))
     port.onDisconnect.addListener(this.remove.bind(this, tabId))
@@ -264,8 +312,19 @@ tabStatus = {
     })
   },
 
-  updateTab: function(tabId) {
-    var tabData = this.tabId[tabId]
+  updateTab: function(tab, ensureOverlay) {
+    var url = tab.url,
+        tabId = tab.id,
+        tabData = this.tabId[tabId],
+        info = redditInfo.getURL(url)
+
+    setPageActionIcon(tab, info)
+
+    // Manually inject the page overlay if we have permission on https pages.
+    if (ensureOverlay && info) {
+      this.ensureOverlay(tab)
+    }
+
     if (tabData && tabData.bar) {
       console.log('Updating tab', tabId)
       barStatus.update(tabData.bar)
@@ -607,7 +666,7 @@ function onActionClicked(tab) {
 
   redditInfo.lookupURL(tab.url, true, function(info) {
     window.clearInterval(workingAnimation)
-    setPageActionIcon(tab, info)
+    tabStatus.updateTab(tab, true)
     delete workingPageActions[tab.id]
 
     if (info) {
@@ -618,8 +677,15 @@ function onActionClicked(tab) {
   })
 }
 
-chrome.tabs.onSelectionChanged.addListener(tabStatus.updateTab.bind(tabStatus))
 chrome.pageAction.onClicked.addListener(onActionClicked)
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+  chrome.tabs.get(activeInfo.tabId, function(tab) {
+    tabStatus.updateTab(tab)
+  })
+})
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  tabStatus.updateTab(tab, true)
+})
 
 chrome.extension.onRequest.addListener(function(request, sender, callback) {
   switch (request.action) {
@@ -639,7 +705,6 @@ chrome.extension.onConnect.addListener(function(port) {
       tabStatus.add(port)
       var tab = port.sender.tab,
           info = redditInfo.getURL(tab.url)
-      setPageActionIcon(tab, info)
       if (info) {
         if (localStorage['autoShow'] == 'false') {
           console.log('Auto-show disabled. Ignoring reddit page', info)
