@@ -9,8 +9,9 @@
 * Fix bug where clicking thumbnails wouldn't open bar. [mhweaver]
 * Fix bug where submission title is truncated. [mhweaver]
 * Fix bug where clicking the submit button didn't fill in the URL. [chromakode]
+* Fix bug where HTML entities appeared in bar titles. [chromakode]
 * Add strict CSP for extra security. [chromakode]
-* Update internal jQuery to 1.8.0. [chromakode]
+* Update internal jQuery to 1.8.1. [chromakode]
 * Update to latest Chrome manifest style. [chromakode]
 
 == Version 1.1.1 ==
