@@ -2,12 +2,15 @@ body { margin:5px; font:normal small verdana, arial, helvetica, sans-serif; curs
 #icon { height:32px; width:32px; float:left; }
 #title { font-weight:bold; }
 #title, #subject { margin-left:38px; font-family:helvetica, arial, sans-serif; font-size:13px; }
+#subject { width:250px; white-space:nowrap; text-overflow:ellipsis; overflow:hidden; }
 #from, #r.sr { font-weight:bold; }
 #from { color:#336699; }
 #r { color:black; }
-#divider { border:none; border-bottom:1px dotted #888; margin-bottom:.25em; }
+#divider { border:none; border-bottom:1px dashed #bbb; margin-bottom:.25em; width:100%; }
 #description { color:#888; font-size:x-small; }
-.md { margin-left:15px; }
+#body { max-height:75px; overflow:hidden; }
+.md { margin-left:15px; margin-right:5px; }
+#fade { position:absolute; left:0; right:0; top:100px; bottom:0px; box-shadow:0 -47px 34px -27px white inset; }
 
 /* from reddit's /public/static/css/reddit.css */
 .md { font: normal x-small verdana, arial, helvetica, sans-serif; }
