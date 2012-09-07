@@ -244,7 +244,6 @@ tabStatus = {
 
   remove: function(tabId) {
     console.log('Tab removed', tabId)
-    var fullname = this.tabId[tabId].fullname
     delete this.tabId[tabId]
   },
 
