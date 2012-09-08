@@ -170,10 +170,26 @@ redditInfo = {
     this._storedLookup('id', name, this.fullname, useStored, callback)
   },
 
-  _thingAction: function(action, data, callback) {
+  _thingAction: function(action, data, callback, isRetry) {
     if (!this.isLoggedIn()) {
       callback(false, 'not logged in')
       return
+    }
+
+    if (!this.modhash) {
+      if (isRetry) {
+        console.log('No modhash after thingAction update. Aborting.')
+      }
+
+      console.log('Attempted thingAction without modhash. Updating.')
+      this.update(function(success) {
+        if (success) {
+          redditInfo._thingAction(action, data, callback, true)
+        } else {
+          console.log('Failed thingAction modhash update. Aborting.')
+          callback(false)
+        }
+      })
     }
 
     data.uh = this.modhash
