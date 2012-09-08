@@ -1,4 +1,5 @@
 == Version 1.2.0 ==
+* Redirect handling. [chromakode]
 * Display markdown formatting in notifications. [marklr + blueshiftlabs]
 * Add modmail notifications. [blueshiftlabs]
 * Add option to close tab / go back after voting. [blueshiftlabs]
