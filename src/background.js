@@ -171,7 +171,10 @@ redditInfo = {
   },
 
   _thingAction: function(action, data, callback) {
-    if (!this.isLoggedIn()) { callback(false, 'not logged in') }
+    if (!this.isLoggedIn()) {
+      callback(false, 'not logged in')
+      return
+    }
 
     data.uh = this.modhash
     this.request({
