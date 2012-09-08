@@ -22,6 +22,7 @@ redditInfo = {
   freshAgeThreshold: 5*60,
 
   url: {},
+  redirects: {},
   fullname: {
     _shine_demo: {
       title: 'companion bar',
@@ -34,7 +35,11 @@ redditInfo = {
   fetching: {},
 
   getURL: function(url) {
-    return this.url[url]
+    return this.url[url] || this.fullname[this.redirects[url]]
+  },
+
+  getFullname: function(fullname) {
+    return this.fullname[fullname]
   },
 
   setURL: function(url, info) {
@@ -115,16 +120,16 @@ redditInfo = {
     })
   },
 
-  _storedLookup: function(keyName, key, array, useStored, callback) {
+  _storedLookup: function(keyName, key, getter, useStored, callback) {
     // Internal rate limited cached info getter.
     //
-    // Look up `key` from `array` and call `callback` with the stored data immediately if
+    // Look up `key` using `getter` and call `callback` with the stored data immediately if
     // `useStored` is true and stored info is available. If stored data is
     // currently in the process of being refreshed or it is older than
     // redditInfo.freshAgeThreshold seconds old, false is returned. Otherwise,
     // the data is fetched from reddit and `callback` is invoked with the
     // result.
-    var stored = array[key],
+    var stored = getter.call(this, key),
         storedAge = 0,
         now = Date.now()
     if (stored) {
@@ -163,11 +168,11 @@ redditInfo = {
   },
 
   lookupURL: function(url, useStored, callback) {
-    this._storedLookup('url', url, this.url, useStored, callback)
+    this._storedLookup('url', url, this.getURL, useStored, callback)
   },
 
   lookupName: function(name, useStored, callback) {
-    this._storedLookup('id', name, this.fullname, useStored, callback)
+    this._storedLookup('id', name, this.getFullname, useStored, callback)
   },
 
   _thingAction: function(action, data, callback, isRetry) {
@@ -252,6 +257,14 @@ redditInfo = {
         redditInfo.setLoggedIn(!changeInfo.removed)
       }
     })
+
+    chrome.webRequest.onBeforeRedirect.addListener(function(details) {
+      var info = redditInfo.url[details.url]
+      if (info) {
+        console.log('Detected redirect from', details.url, 'to', details.redirectUrl)
+        redditInfo.redirects[details.redirectUrl] = info.name
+      }
+    }, {urls:['<all_urls>'], types:['main_frame']})
   },
 
   storeModhash: function(modhash) {
