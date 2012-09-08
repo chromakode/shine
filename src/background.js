@@ -303,9 +303,7 @@ barStatus = {
       this.fullname[fullname] = []
     }
     this.fullname[fullname].push(barData)
-    if (this.hidden[barData.fullname]) {
-      delete this.hidden[barData.fullname]
-    }
+    delete this.hidden[barData.fullname]
     port.onMessage.addListener(this.handleCommand.bind(this, barData))
     port.onDisconnect.addListener(this.remove.bind(this, barData))
     tabStatus.addBar(port.sender.tab.id, barData)
