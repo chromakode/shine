@@ -391,6 +391,15 @@ tabStatus = {
     })
   },
 
+  toggleInfo: function(tabId, fullname) {
+    var tabData = this.tabId[tabId]
+    if (tabData && tabData.bar) {
+      this.showSubmit(tabId)
+    } else {
+      this.showInfo(tabId, fullname)
+    }
+  },
+
   handleCommand: function(tabId, msg) {
     console.log('Received message from tab', tabId, msg)
     switch (msg.action) {
@@ -718,7 +727,7 @@ function onActionClicked(tab) {
     delete workingPageActions[tab.id]
 
     if (info) {
-      tabStatus.showInfo(tab.id, info.name)
+      tabStatus.toggleInfo(tab.id, info.name)
     } else {
       tabStatus.showSubmit(tab.id)
     }
