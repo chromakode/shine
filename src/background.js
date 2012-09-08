@@ -268,6 +268,10 @@ tabStatus = {
   tabId: {},
   injecting: {},
 
+  canOverlay: function(tab) {
+    return localStorage['allowHttps'] == 'true' || urlProtocol(tab.url) != 'https'
+  },
+
   ensureOverlay: function(tab) {
     var needsOverlay = localStorage['allowHttps'] == 'true' && urlProtocol(tab.url) == 'https'
     if (needsOverlay && !(tab.id in this.tabId) && !(tab.id in this.injecting)) {
@@ -632,30 +636,27 @@ function setPageActionIcon(tab, info) {
     return
   }
 
-  switch (urlProtocol(tab.url)) {
-    case 'https':
-      if (localStorage['allowHttps'] != 'true') {
-        chrome.pageAction.setIcon({tabId:tab.id, path:'/images/reddit-disabled.png'})
-        chrome.pageAction.setTitle({tabId:tab.id, title:'Companion is disabled on secure pages (enable in the options)'})
-        chrome.pageAction.show(tab.id)
-        break
-      }
-      // Otherwise, fall through...
-    case 'http':
-      var iconPath = info ? '/images/reddit.png' : '/images/reddit-inactive.png'
-      chrome.pageAction.setIcon({tabId:tab.id, path:iconPath})
-      chrome.pageAction.setTitle({tabId:tab.id, title:'Show reddit information'})
-      chrome.pageAction.show(tab.id)
-      break
+  if (!tabStatus.canOverlay(tab)) {
+    chrome.pageAction.setIcon({tabId:tab.id, path:'/images/reddit-disabled.png'})
+    chrome.pageAction.setTitle({tabId:tab.id, title:'Companion is disabled on secure pages (enable in the options)'})
+    chrome.pageAction.show(tab.id)
+    return
+  }
 
-    default:
-      chrome.pageAction.hide(tab.id)
+  var protocol = urlProtocol(tab.url)
+  if (protocol == 'http' || protocol == 'https') {
+    var iconPath = info ? '/images/reddit.png' : '/images/reddit-inactive.png'
+    chrome.pageAction.setIcon({tabId:tab.id, path:iconPath})
+    chrome.pageAction.setTitle({tabId:tab.id, title:'Show reddit information'})
+    chrome.pageAction.show(tab.id)
+  } else {
+    chrome.pageAction.hide(tab.id)
   }
 }
 
 var workingPageActions = {}
 function onActionClicked(tab) {
-  if (tab.id in workingPageActions) { return }
+  if (!tabStatus.canOverlay(tab) || tab.id in workingPageActions) { return }
   workingPageActions[tab.id] = true
 
   var frame = 0
@@ -714,7 +715,7 @@ chrome.extension.onConnect.addListener(function(port) {
           console.log('Auto-show disabled. Ignoring reddit page', info)
         } else if (localStorage['autoShowSelf'] == 'false' && info.is_self) {
           console.log('Ignoring self post', info)
-        } else if (localStorage['allowHttps'] == 'false' && urlProtocol(tab.url) == 'https') {
+        } else if (!tabStatus.canOverlay(tab)) {
           console.log('Https page. Ignoring', info)
         } else if (barStatus.hidden[info.name]) {
           console.log('Bar was closed on this page. Ignoring.', info)
