@@ -24,7 +24,7 @@
     "page": "background.html"
   },
   "page_action": {
-    "default_icon": "images/reddit.png",
+    "default_icon": "images/pageaction.png",
     "default_title": "Show reddit information"
   },
   "content_scripts": [
