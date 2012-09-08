@@ -684,7 +684,7 @@ function setPageActionIcon(tab, info) {
   }
 
   if (!tabStatus.canOverlay(tab)) {
-    chrome.pageAction.setIcon({tabId:tab.id, path:'/images/reddit-disabled.png'})
+    chrome.pageAction.setIcon({tabId:tab.id, path:'/images/pageaction-disabled.png'})
     chrome.pageAction.setTitle({tabId:tab.id, title:'Companion is disabled on secure pages (enable in the options)'})
     chrome.pageAction.show(tab.id)
     return
@@ -692,7 +692,7 @@ function setPageActionIcon(tab, info) {
 
   var protocol = urlProtocol(tab.url)
   if (protocol == 'http' || protocol == 'https') {
-    var iconPath = info ? '/images/reddit.png' : '/images/reddit-inactive.png'
+    var iconPath = info ? '/images/pageaction.png' : '/images/pageaction-inactive.png'
     chrome.pageAction.setIcon({tabId:tab.id, path:iconPath})
     chrome.pageAction.setTitle({tabId:tab.id, title:'Show reddit information'})
     chrome.pageAction.show(tab.id)
