@@ -359,13 +359,6 @@ tabStatus = {
     }
   },
 
-  _showInfo: function(tabId, fullname) {
-    this.send(tabId, {
-      action: 'showInfo',
-      fullname: fullname
-    })
-  },
-
   updateTab: function(tab, ensureOverlay) {
     var url = tab.url,
         tabId = tab.id,
@@ -386,7 +379,10 @@ tabStatus = {
   },
 
   showInfo: function(tabId, fullname) {
-    this._showInfo(tabId, fullname)
+    this.send(tabId, {
+      action: 'showInfo',
+      fullname: fullname
+    })
   },
 
   showSubmit: function(tabId) {
