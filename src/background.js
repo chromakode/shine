@@ -229,7 +229,7 @@ redditInfo = {
 
   setLoggedIn: function(hasCookie) {
     this.hasCookie = hasCookie
-    console.log("Changed reddit logged in state:", hasCookie)
+    console.log('Changed reddit logged in state:', hasCookie)
     if (!hasCookie) {
       this.storeUsername(null)
       this.storeModhash(null)
@@ -278,14 +278,14 @@ function addContent(tab, files, callback) {
       } else if (extension == '.css') {
         var inject = chrome.tabs.insertCSS
       } else {
-        throw "Invalid file extension."
+        throw 'Invalid file extension.'
       }
 
       inject(tab.id, fileInfo, function() {
         injectNext()
       })
     } else {
-      console.log("Content injection took", Date.now() - startTime, 'ms')
+      console.log('Content injection took', Date.now() - startTime, 'ms')
       if (callback) { callback() }
     }
   }
