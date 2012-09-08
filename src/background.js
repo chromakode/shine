@@ -302,6 +302,16 @@ tabStatus = {
     delete this.tabId[tabId]
   },
 
+  removeHttps: function() {
+    for (var tabId in this.tabId) {
+      chrome.tabs.get(Number(tabId), function(tab) {
+        if (urlProtocol(tab.url) == 'https') {
+          tabStatus.tabId[tab.id].port.disconnect()
+        }
+      })
+    }
+  },
+
   send: function(tabId, msg) {
     var tabData = this.tabId[tabId]
     if (tabData) {
@@ -741,6 +751,9 @@ window.addEventListener('storage', function(e) {
       }
       break
     case 'allowHttps':
+      if (e.newValue == 'false') {
+        tabStatus.removeHttps()
+      }
     case 'showPageAction':
       setAllPageActionIcons()
       break
