@@ -411,7 +411,7 @@ barStatus = {
     console.log('Received message from bar', barData, msg)
     var updateAfter = function(success) {
       if (!success) {
-        this.update.bind(this, barData)
+        barStatus.update(barData, true)
       }
     }
     switch (msg.action) {
