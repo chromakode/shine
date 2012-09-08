@@ -283,7 +283,7 @@ tabStatus = {
     port.onDisconnect.addListener(this.remove.bind(this, tabId))
   },
 
-  addBar: function(tabId, bar) {
+  setBar: function(tabId, bar) {
     var tabData = this.tabId[tabId]
     if (tabData) {
       tabData.bar = bar
@@ -327,7 +327,7 @@ tabStatus = {
 
     if (tabData && tabData.bar) {
       console.log('Updating tab', tabId)
-      barStatus.update(tabData.bar)
+      barStatus.update(tabData.bar, true)
     }
   },
 
@@ -365,7 +365,7 @@ barStatus = {
     delete this.hidden[barData.fullname]
     port.onMessage.addListener(this.handleCommand.bind(this, barData))
     port.onDisconnect.addListener(this.remove.bind(this, barData))
-    tabStatus.addBar(port.sender.tab.id, barData)
+    tabStatus.setBar(port.sender.tab.id, barData)
   },
 
   remove: function(barData) {
@@ -378,6 +378,7 @@ barStatus = {
       if (!bars.length) {
         delete this.fullname[fullname]
       }
+      tabStatus.setBar(barData.port.sender.tab.id, null)
     }
   },
 
