@@ -7,6 +7,7 @@
   "permissions": [
     "tabs",
     "notifications",
+    "cookies",
     "http://*/*"
   ],
   "optional_permissions": [

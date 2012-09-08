@@ -208,13 +208,34 @@ redditInfo = {
   },
 
   isLoggedIn: function() {
-    // TODO: check for cookie
-    return this.modhash != null && this.modhash != ''
+    return this.hasCookie
+  },
+
+  setLoggedIn: function(hasCookie) {
+    this.hasCookie = hasCookie
+    console.log("Changed reddit logged in state:", hasCookie)
+    if (!hasCookie) {
+      this.storeUsername(null)
+      this.storeModhash(null)
+    }
   },
 
   init: function() {
     this.user = localStorage['username']
     this.modhash = localStorage['modhash']
+
+    chrome.cookies.get({
+      url:'http://www.reddit.com', name:'reddit_session'
+    }, function(cookie) {
+      redditInfo.setLoggedIn(!!cookie)
+    })
+
+    chrome.cookies.onChanged.addListener(function(changeInfo) {
+      var cookie = changeInfo.cookie
+      if (cookie.domain == '.reddit.com' && cookie.name == 'reddit_session') {
+        redditInfo.setLoggedIn(!changeInfo.removed)
+      }
+    })
   },
 
   storeModhash: function(modhash) {
