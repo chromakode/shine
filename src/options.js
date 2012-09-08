@@ -11,25 +11,26 @@ $(document).ready(function() {
   $('.notification-demo > .message').text(randomChoice(messages))
 
   var prefHandlers = {
-    allowHttps: function(name, value) {
+    allowHttps: function(name, value, el) {
       if (value) {
         chrome.permissions.request({
           origins: ['https://*/*']
         }, function(granted) {
-          prefHandlers.checkbox(name, granted)
+          prefHandlers.checkbox(name, granted, el)
         })
       } else {
         chrome.permissions.remove({
           origins: ['https://*/*']
         }, function(removed) {
-          prefHandlers.checkbox(name, !removed)
+          prefHandlers.checkbox(name, !removed, el)
         })
       }
     },
 
-    checkbox: function(name, value) {
+    checkbox: function(name, value, el) {
       localStorage[name] = value
       $('#contents').toggleClass(name, value)
+      $(el).prop('checked', value)
     }
   }
 
@@ -43,7 +44,7 @@ $(document).ready(function() {
     .click(function() {
       var value = $(this).is(':checked'),
           handler = prefHandlers[this.id] || prefHandlers.checkbox
-      handler(this.id, value)
+      handler(this.id, value, this)
     })
 
   $('#notifyTime')
