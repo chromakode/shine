@@ -45,7 +45,7 @@ redditInfo = {
       this.fullname[info.name] = info
       console.log('Stored reddit info for', url, info)
     } else {
-      console.log('Received info not newer than stored info. Did not store.', stored, info)
+      console.log('Received info older than stored info. Did not store.', stored, info)
     }
   },
 
